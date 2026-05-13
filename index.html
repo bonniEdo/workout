@@ -77,9 +77,16 @@
     .day-date{font-weight:1000;margin:0}
     .tag{border-radius:999px;background:#f5f5f4;color:#78716c;font-size:10px;font-weight:900;padding:5px 8px}
     .day-sub{margin:3px 0 0;color:#78716c;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .record-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+    .save-button{border:0;border-radius:999px;padding:12px 18px;font-size:14px;font-weight:1000;background:var(--yellow);color:#422006}
     .done-button{border:0;border-radius:999px;padding:12px 18px;font-size:14px;font-weight:1000;background:#1c1917;color:#fff}
     .done-button.done{background:#bef264;color:#365314}
+    .save-status{width:100%;text-align:right;font-size:12px;font-weight:900;color:#a8a29e}
     .inputs{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .meal-group{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .meal-total{grid-column:1/-1;background:#fff;border-radius:18px;padding:12px 14px;box-shadow:inset 0 0 0 1px #fef3c7;font-weight:1000;display:flex;justify-content:space-between;align-items:center;color:#292524}
+    .meal-total span:first-child{font-size:12px;color:#a8a29e;letter-spacing:.12em;text-transform:uppercase}
+    .meal-total span:last-child{font-size:20px}
     .input-card{background:#fff8d6;border-radius:24px;padding:15px}
     .input-card label{display:flex;align-items:center;gap:6px;color:#a16207;font-size:12px;font-weight:1000;letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px}
     .input-wrap{display:flex;align-items:center;border-radius:18px;background:#fff;padding:12px 14px;box-shadow:inset 0 0 0 1px #fef3c7}
@@ -96,6 +103,24 @@
     .memo{background:#fafaf9;margin-top:12px}
     .memo .small-label{color:#a8a29e}
     textarea{min-height:110px;resize:vertical;font-size:14px;line-height:1.6;font-weight:600}
+    .weight-section{margin-top:18px}
+    .weight-panel{display:grid;grid-template-columns:1fr 1.2fr;gap:16px;align-items:stretch}
+    .weight-chart{min-height:280px;background:#fff;border-radius:24px;padding:14px;box-shadow:inset 0 0 0 1px #fef3c7}
+    .weight-chart svg{width:100%;height:100%;min-height:250px;display:block}
+    .weight-chart text{font-size:11px;font-weight:800;fill:#78716c}
+    .chart-grid{stroke:#e7e5e4;stroke-width:1}
+    .chart-target{fill:none;stroke:#a8a29e;stroke-width:3;stroke-dasharray:7 7}
+    .chart-line{fill:none;stroke:#f59e0b;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+    .chart-dot{fill:#292524;stroke:#fff;stroke-width:3}
+    .weight-table-wrap{max-height:360px;overflow:auto;border-radius:24px;background:#fff;box-shadow:inset 0 0 0 1px #fef3c7}
+    .weight-table{width:100%;border-collapse:collapse;font-size:14px}
+    .weight-table th,.weight-table td{padding:11px 12px;border-bottom:1px solid #f5f5f4;text-align:left}
+    .weight-table th{position:sticky;top:0;background:#fff8d6;color:#a16207;font-size:11px;font-weight:1000;letter-spacing:.14em;text-transform:uppercase;z-index:1}
+    .weight-table tr:last-child td{border-bottom:0}
+    .weight-input{width:92px;border:0;outline:0;border-radius:14px;background:#fff8d6;padding:9px 10px;font-weight:1000;color:#292524}
+    .weight-delta{font-weight:1000;color:#78716c}
+    .weight-delta.good{color:#15803d}
+    .weight-delta.up{color:#b45309}
     .goals{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
     .goal{background:rgba(255,255,255,.82);border-radius:28px;padding:20px;box-shadow:var(--soft-shadow)}
     .goal-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
@@ -111,6 +136,7 @@
     .hidden{display:none!important}
     @media (max-width: 980px){
       .hero,.layout{grid-template-columns:1fr}
+      .weight-panel{grid-template-columns:1fr}
       .metrics{grid-template-columns:repeat(2,1fr)}
       .goals{grid-template-columns:1fr}
       h1{font-size:46px}
@@ -119,11 +145,15 @@
       main{padding:16px 12px 32px}
       .card{padding:20px;border-radius:24px}
       .inputs,.two{grid-template-columns:1fr}
+      .meal-group{grid-template-columns:1fr}
       .metrics{grid-template-columns:repeat(2,1fr)}
       .metric-value{font-size:22px}
       h1{font-size:40px}
       .lead{font-size:15px}
       .section-title{align-items:flex-start}
+      .record-actions{justify-content:flex-start}
+      .save-status{text-align:left}
+      .weight-table-wrap{max-height:420px}
       .day-inner{gap:9px}
       .mini-emoji{padding:7px 9px}
     }
@@ -207,13 +237,35 @@
             <p>Daily Check-in</p>
             <h2 id="recordTitle">5/13（三） 紀錄</h2>
           </div>
-          <button id="doneBtn" class="done-button">打卡完成</button>
+          <div class="record-actions">
+            <button id="saveBtn" class="save-button">儲存紀錄</button>
+            <button id="doneBtn" class="done-button">打卡完成</button>
+            <div id="saveStatus" class="save-status">已自動儲存</div>
+          </div>
         </div>
 
         <div class="inputs">
-          <div class="input-card">
-            <label>🍱 今日熱量</label>
-            <div class="input-wrap"><input id="calories" inputmode="decimal" placeholder="例：1500"><span class="suffix">kcal</span></div>
+          <div class="meal-group">
+            <div class="input-card">
+              <label>🌞 早餐</label>
+              <div class="input-wrap"><input id="breakfastCalories" inputmode="decimal" placeholder="例：350"><span class="suffix">kcal</span></div>
+            </div>
+            <div class="input-card">
+              <label>🍱 午餐</label>
+              <div class="input-wrap"><input id="lunchCalories" inputmode="decimal" placeholder="例：550"><span class="suffix">kcal</span></div>
+            </div>
+            <div class="input-card">
+              <label>🌙 晚餐</label>
+              <div class="input-wrap"><input id="dinnerCalories" inputmode="decimal" placeholder="例：500"><span class="suffix">kcal</span></div>
+            </div>
+            <div class="input-card">
+              <label>🥤 零食飲料</label>
+              <div class="input-wrap"><input id="snackCalories" inputmode="decimal" placeholder="例：150"><span class="suffix">kcal</span></div>
+            </div>
+            <div class="meal-total">
+              <span>今日熱量合計</span>
+              <span><strong id="dailyCaloriesTotal">--</strong> kcal</span>
+            </div>
           </div>
           <div class="input-card">
             <label>🥚 蛋白質</label>
@@ -222,10 +274,6 @@
           <div class="input-card">
             <label>🔥 手錶運動消耗</label>
             <div class="input-wrap"><input id="burn" inputmode="decimal" placeholder="例：420"><span class="suffix">kcal</span></div>
-          </div>
-          <div class="input-card">
-            <label>⚖️ 早晨體重</label>
-            <div class="input-wrap"><input id="weight" inputmode="decimal" placeholder="例：64.6"><span class="suffix">kg</span></div>
           </div>
           <div class="input-card">
             <label>📉 體脂率</label>
@@ -257,6 +305,31 @@
         <div class="memo">
           <label class="small-label">備註</label>
           <textarea id="memo" placeholder="例：今天羽球打超累、晚餐吃自助餐、睡眠不足..."></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="card weight-section">
+      <div class="section-title">
+        <div>
+          <p>Morning Weight</p>
+          <h2>早晨體重趨勢</h2>
+        </div>
+      </div>
+      <div class="weight-panel">
+        <div class="weight-chart" id="weightChart"></div>
+        <div class="weight-table-wrap">
+          <table class="weight-table">
+            <thead>
+              <tr>
+                <th>日期</th>
+                <th>目標</th>
+                <th>早晨體重</th>
+                <th>變化</th>
+              </tr>
+            </thead>
+            <tbody id="weightTableBody"></tbody>
+          </table>
         </div>
       </div>
     </section>
@@ -322,14 +395,15 @@
     ];
 
     const initialLog = dayPlans.map((p, i) => ({
-      id: i, done: false, calories: "", protein: "", burn: "", weight: "", bodyFat: "", water: "", mood: "", memo: "", ...p
+      id: i, done: false, breakfastCalories: "", lunchCalories: "", dinnerCalories: "", snackCalories: "", calories: "", protein: "", burn: "", weight: "", bodyFat: "", water: "", mood: "", memo: "", ...p
     }));
+
+    const calorieFields = ["breakfastCalories","lunchCalories","dinnerCalories","snackCalories"];
+    const fields = [...calorieFields,"protein","burn","bodyFat","water","mood","memo"];
 
     let logs = loadLogs();
     let selected = 0;
     let viewWeek = 1;
-
-    const fields = ["calories","protein","burn","weight","bodyFat","water","mood","memo"];
 
     function loadLogs(){
       try{
@@ -337,7 +411,13 @@
         if(!saved) return structuredClone(initialLog);
         const parsed = JSON.parse(saved);
         if(!Array.isArray(parsed) || parsed.length !== initialLog.length) return structuredClone(initialLog);
-        return initialLog.map((base, i) => ({...base, ...parsed[i]}));
+        return initialLog.map((base, i) => {
+          const merged = {...base, ...parsed[i]};
+          if(merged.calories && !calorieFields.some(field => merged[field])){
+            merged.breakfastCalories = merged.calories;
+          }
+          return merged;
+        });
       }catch(e){
         return structuredClone(initialLog);
       }
@@ -345,6 +425,14 @@
 
     function saveLogs(){
       localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+    }
+
+    function updateSaveStatus(text){
+      document.getElementById("saveStatus").textContent = text;
+    }
+
+    function savedNowText(){
+      return `已儲存 ${new Date().toLocaleTimeString("zh-TW", {hour: "2-digit", minute: "2-digit"})}`;
     }
 
     function formatDate(offset){
@@ -360,6 +448,114 @@
       const arr = nums.map(Number).filter(Boolean);
       if(!arr.length) return 0;
       return Math.round(arr.reduce((a,b)=>a+b,0) / arr.length);
+    }
+
+    function getDailyCalories(log){
+      const mealTotal = calorieFields.reduce((sum, field) => sum + (Number(log[field]) || 0), 0);
+      return mealTotal || (Number(log.calories) || 0);
+    }
+
+    function getTargetWeight(id){
+      return 65 - (5 * (id / (logs.length - 1)));
+    }
+
+    function getWeightStats(){
+      const weights = logs.map(l => Number(l.weight)).filter(Boolean);
+      const latestWeight = weights.length ? weights[weights.length - 1] : 65;
+      const lost = Math.max(0, 65 - latestWeight);
+      const weightProgress = Math.min(100, Math.max(0, Math.round((lost / 5) * 100)));
+      return { latestWeight, lost, weightProgress };
+    }
+
+    function renderWeightProgress(){
+      const { lost, weightProgress } = getWeightStats();
+      document.getElementById("weightLost").textContent = `${lost.toFixed(1)} / 5.0 kg`;
+      document.getElementById("weightBar").style.width = `${weightProgress}%`;
+    }
+
+    function buildPath(points){
+      return points.map((point, i) => `${i ? "L" : "M"} ${point.x.toFixed(1)} ${point.y.toFixed(1)}`).join(" ");
+    }
+
+    function escapeAttr(value){
+      return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+    }
+
+    function renderWeightTracker(updateTable = true){
+      const actualWeights = logs.map(l => Number(l.weight)).filter(Boolean);
+      const minWeight = Math.floor(Math.min(59, 60, ...actualWeights)) - 0.5;
+      const maxWeight = Math.ceil(Math.max(66, 65, ...actualWeights)) + 0.5;
+      const left = 46;
+      const right = 18;
+      const top = 18;
+      const bottom = 34;
+      const width = 680;
+      const height = 250;
+      const chartWidth = width - left - right;
+      const chartHeight = height - top - bottom;
+      const xFor = id => left + (id / (logs.length - 1)) * chartWidth;
+      const yFor = weight => top + ((maxWeight - weight) / (maxWeight - minWeight)) * chartHeight;
+      const targetPoints = logs.map(log => ({ x: xFor(log.id), y: yFor(getTargetWeight(log.id)) }));
+      const actualPoints = logs
+        .map(log => ({ id: log.id, weight: Number(log.weight) || 0 }))
+        .filter(point => point.weight)
+        .map(point => ({ ...point, x: xFor(point.id), y: yFor(point.weight) }));
+      const yTicks = [Math.floor(maxWeight), Math.round((maxWeight + minWeight) / 2), Math.ceil(minWeight)];
+      const grid = yTicks.map(tick => `
+        <line class="chart-grid" x1="${left}" y1="${yFor(tick)}" x2="${width - right}" y2="${yFor(tick)}"></line>
+        <text x="8" y="${yFor(tick) + 4}">${tick}kg</text>
+      `).join("");
+      const actualLine = actualPoints.length > 1 ? `<path class="chart-line" d="${buildPath(actualPoints)}"></path>` : "";
+      const dots = actualPoints.map(point => `<circle class="chart-dot" cx="${point.x}" cy="${point.y}" r="5"></circle>`).join("");
+      const emptyText = actualPoints.length ? "" : `<text x="${width / 2 - 54}" y="${height / 2}">輸入體重後會出現曲線</text>`;
+
+      document.getElementById("weightChart").innerHTML = `
+        <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="早晨體重趨勢圖">
+          ${grid}
+          <path class="chart-target" d="${buildPath(targetPoints)}"></path>
+          ${actualLine}
+          ${dots}
+          ${emptyText}
+          <text x="${left}" y="${height - 8}">${formatDate(0)}</text>
+          <text x="${width - 86}" y="${height - 8}">${formatDate(logs.length - 1)}</text>
+        </svg>
+      `;
+
+      if(!updateTable) return;
+
+      document.getElementById("weightTableBody").innerHTML = logs.map(log => {
+        const weight = Number(log.weight) || 0;
+        const target = getTargetWeight(log.id);
+        const delta = weight ? weight - 65 : 0;
+        const deltaText = weight ? `${delta >= 0 ? "+" : ""}${delta.toFixed(1)} kg` : "--";
+        const deltaClass = weight ? (delta <= 0 ? "good" : "up") : "";
+        return `
+          <tr>
+            <td>${formatDate(log.id)}</td>
+            <td>${target.toFixed(1)} kg</td>
+            <td><input class="weight-input" data-weight-id="${log.id}" inputmode="decimal" value="${escapeAttr(log.weight || "")}" placeholder="例：64.6"> kg</td>
+            <td class="weight-delta ${deltaClass}" data-weight-delta="${log.id}">${deltaText}</td>
+          </tr>
+        `;
+      }).join("");
+
+      document.querySelectorAll("[data-weight-id]").forEach(input => {
+        input.addEventListener("input", e => {
+          const id = Number(e.target.dataset.weightId);
+          logs[id].weight = e.target.value;
+          saveLogs();
+          updateSaveStatus("已自動儲存體重");
+          const weight = Number(e.target.value) || 0;
+          const deltaCell = document.querySelector(`[data-weight-delta="${id}"]`);
+          if(deltaCell){
+            const delta = weight ? weight - 65 : 0;
+            deltaCell.textContent = weight ? `${delta >= 0 ? "+" : ""}${delta.toFixed(1)} kg` : "--";
+            deltaCell.className = `weight-delta ${weight ? (delta <= 0 ? "good" : "up") : ""}`;
+          }
+          renderHeaderOnly();
+          renderWeightTracker(false);
+        });
+      });
     }
 
     function render(){
@@ -382,6 +578,7 @@
       fields.forEach(field => {
         document.getElementById(field).value = current[field] || "";
       });
+      document.getElementById("dailyCaloriesTotal").textContent = getDailyCalories(current) || "--";
 
       const doneBtn = document.getElementById("doneBtn");
       doneBtn.textContent = current.done ? "已完成" : "打卡完成";
@@ -389,24 +586,20 @@
 
       const doneCount = logs.filter(l => l.done).length;
       const progress = Math.round((doneCount / logs.length) * 100);
-      const avgCalories = avg(logs.map(l => l.calories));
+      const avgCalories = avg(logs.map(getDailyCalories));
       const avgProtein = avg(logs.map(l => l.protein));
       const totalBurn = logs.reduce((sum, l) => sum + (Number(l.burn) || 0), 0);
-      const weights = logs.map(l => Number(l.weight)).filter(Boolean);
-      const latestWeight = weights.length ? weights[weights.length - 1] : 65;
-      const lost = Math.max(0, 65 - latestWeight);
-      const weightProgress = Math.min(100, Math.max(0, Math.round((lost / 5) * 100)));
 
       document.getElementById("progressPercent").textContent = `${progress}%`;
       document.getElementById("doneDays").textContent = `${doneCount}/28`;
       document.getElementById("avgCalories").textContent = avgCalories ? String(avgCalories) : "--";
       document.getElementById("avgProtein").textContent = avgProtein ? String(avgProtein) : "--";
       document.getElementById("totalBurn").textContent = totalBurn ? String(totalBurn) : "--";
-      document.getElementById("weightLost").textContent = `${lost.toFixed(1)} / 5.0 kg`;
-      document.getElementById("weightBar").style.width = `${weightProgress}%`;
+      renderWeightProgress();
 
       document.getElementById("weekTitle").textContent = `第 ${viewWeek} 週`;
       renderWeek();
+      renderWeightTracker();
     }
 
     function renderWeek(){
@@ -461,7 +654,13 @@
     document.getElementById("doneBtn").addEventListener("click", () => {
       logs[selected].done = !logs[selected].done;
       saveLogs();
+      updateSaveStatus(savedNowText());
       render();
+    });
+
+    document.getElementById("saveBtn").addEventListener("click", () => {
+      saveLogs();
+      updateSaveStatus(savedNowText());
     });
 
     document.getElementById("resetBtn").addEventListener("click", () => {
@@ -470,6 +669,7 @@
         selected = 0;
         viewWeek = 1;
         saveLogs();
+        updateSaveStatus(savedNowText());
         render();
       }
     });
@@ -478,28 +678,26 @@
       document.getElementById(field).addEventListener("input", e => {
         logs[selected][field] = e.target.value;
         saveLogs();
+        updateSaveStatus("已自動儲存");
         renderHeaderOnly();
       });
     });
 
     function renderHeaderOnly(){
+      document.getElementById("dailyCaloriesTotal").textContent = getDailyCalories(logs[selected]) || "--";
+
       const doneCount = logs.filter(l => l.done).length;
       const progress = Math.round((doneCount / logs.length) * 100);
-      const avgCalories = avg(logs.map(l => l.calories));
+      const avgCalories = avg(logs.map(getDailyCalories));
       const avgProtein = avg(logs.map(l => l.protein));
       const totalBurn = logs.reduce((sum, l) => sum + (Number(l.burn) || 0), 0);
-      const weights = logs.map(l => Number(l.weight)).filter(Boolean);
-      const latestWeight = weights.length ? weights[weights.length - 1] : 65;
-      const lost = Math.max(0, 65 - latestWeight);
-      const weightProgress = Math.min(100, Math.max(0, Math.round((lost / 5) * 100)));
 
       document.getElementById("progressPercent").textContent = `${progress}%`;
       document.getElementById("doneDays").textContent = `${doneCount}/28`;
       document.getElementById("avgCalories").textContent = avgCalories ? String(avgCalories) : "--";
       document.getElementById("avgProtein").textContent = avgProtein ? String(avgProtein) : "--";
       document.getElementById("totalBurn").textContent = totalBurn ? String(totalBurn) : "--";
-      document.getElementById("weightLost").textContent = `${lost.toFixed(1)} / 5.0 kg`;
-      document.getElementById("weightBar").style.width = `${weightProgress}%`;
+      renderWeightProgress();
     }
 
     render();
