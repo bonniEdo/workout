@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bonnie減脂打卡基地</title>
+  <style>
+    :root{
+      --bg:#FFF6C7;
+      --yellow:#FFE066;
+      --yellow2:#FFF1A8;
+      --orange:#FFD1A3;
+      --lime:#DDF99B;
+      --green:#C6F6D5;
+      --stone:#292524;
+      --muted:#78716c;
+      --white:rgba(255,255,255,.82);
+      --card-shadow:0 18px 45px rgba(217, 171, 23, .22);
+      --soft-shadow:0 10px 25px rgba(120, 113, 108, .12);
+      --radius:30px;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;min-height:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif;color:var(--stone);background:var(--bg)}
+    body{overflow-x:hidden}
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    .blob{position:fixed;border-radius:999px;filter:blur(55px);opacity:.7;pointer-events:none;z-index:0}
+    .b1{width:330px;height:330px;background:#FFE580;left:-120px;top:-120px}
+    .b2{width:420px;height:420px;background:#FFC690;right:-150px;top:150px}
+    .b3{width:360px;height:360px;background:#DDF99B;left:35%;bottom:-120px}
+    main{position:relative;z-index:1;max-width:1280px;margin:0 auto;padding:28px 18px 42px}
+    .hero{display:grid;grid-template-columns:1.35fr .95fr;gap:18px;margin-bottom:18px}
+    .card{background:var(--white);backdrop-filter:blur(12px);border-radius:var(--radius);box-shadow:var(--card-shadow);padding:28px}
+    .dark{background:#1c1917;color:#fff}
+    .chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:18px}
+    .chip{border:0;border-radius:999px;padding:10px 15px;font-size:12px;font-weight:900;letter-spacing:.12em}
+    .chip-main{background:var(--yellow);color:#422006}
+    .chip-light{background:#fff;color:#57534e;box-shadow:0 4px 12px rgba(0,0,0,.06)}
+    .chip-reset{background:#f5f5f4;color:#78716c}
+    h1{font-size:62px;line-height:.98;margin:0;font-weight:1000;letter-spacing:-.055em}
+    .lead{font-size:17px;line-height:1.8;max-width:760px;color:#57534e;font-weight:650}
+    .metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:22px}
+    .metric{background:#fff;border-radius:24px;padding:16px;box-shadow:var(--soft-shadow)}
+    .metric-label{display:flex;gap:6px;align-items:center;color:#a8a29e;font-size:12px;font-weight:950;letter-spacing:.08em;margin-bottom:6px}
+    .metric-value{font-size:28px;font-weight:1000}
+    .metric-sub{font-size:12px;color:#a8a29e;font-weight:900;margin-left:3px}
+    .progress-box{margin-top:22px;background:#fff8d6;border-radius:26px;padding:16px}
+    .progress-label{display:flex;justify-content:space-between;gap:10px;font-size:14px;font-weight:1000;margin-bottom:8px}
+    .progress-track{height:16px;background:#fff;border-radius:999px;overflow:hidden}
+    .progress-fill{height:100%;background:var(--yellow);border-radius:999px;width:0%;transition:.25s}
+    .today-head{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+    .icon-box{width:54px;height:54px;display:flex;align-items:center;justify-content:center;background:var(--yellow);border-radius:18px;font-size:28px}
+    .eyebrow{font-size:12px;font-weight:1000;letter-spacing:.22em;text-transform:uppercase;color:#fde68a;margin:0 0 3px}
+    .today-date{font-size:25px;font-weight:1000;margin:0}
+    .plan-pill{border-radius:26px;border:1px solid;padding:16px;margin-bottom:14px}
+    .plan-flex{display:flex;align-items:center;gap:12px}
+    .plan-emoji{font-size:34px}
+    .plan-tag{font-size:12px;font-weight:1000;letter-spacing:.15em;opacity:.72;margin:0}
+    .plan-title{font-size:20px;font-weight:1000;margin:2px 0 0}
+    .today-note{font-size:14px;line-height:1.7;color:#d6d3d1}
+    .items{display:grid;gap:8px}
+    .item{background:rgba(255,255,255,.1);border-radius:18px;padding:10px 12px;font-size:14px;display:flex;gap:8px;align-items:center}
+    .layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:18px}
+    .section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
+    .section-title p{font-size:12px;font-weight:1000;letter-spacing:.22em;text-transform:uppercase;color:#a8a29e;margin:0 0 4px}
+    .section-title h2{font-size:26px;margin:0;font-weight:1000}
+    .navbtn{width:40px;height:40px;border-radius:999px;border:0;background:#fff;font-size:24px;font-weight:1000;box-shadow:var(--soft-shadow)}
+    .week-list{display:grid;gap:10px}
+    .day-btn{width:100%;text-align:left;border:1px solid transparent;border-radius:24px;background:#fff;padding:14px;transition:.15s;box-shadow:0 4px 14px rgba(0,0,0,.035)}
+    .day-btn:hover{transform:scale(1.01)}
+    .day-btn.active{border-color:#292524;background:#fff3b0;box-shadow:0 10px 22px rgba(0,0,0,.09)}
+    .day-inner{display:flex;align-items:center;gap:12px}
+    .check{width:42px;height:42px;border-radius:16px;display:flex;align-items:center;justify-content:center;background:#f5f5f4;color:#a8a29e;font-size:22px;font-weight:1000}
+    .check.done{background:#bef264;color:#365314}
+    .mini-emoji{border-radius:16px;border:1px solid;padding:8px 11px;font-size:20px}
+    .day-title-line{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+    .day-date{font-weight:1000;margin:0}
+    .tag{border-radius:999px;background:#f5f5f4;color:#78716c;font-size:10px;font-weight:900;padding:5px 8px}
+    .day-sub{margin:3px 0 0;color:#78716c;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .done-button{border:0;border-radius:999px;padding:12px 18px;font-size:14px;font-weight:1000;background:#1c1917;color:#fff}
+    .done-button.done{background:#bef264;color:#365314}
+    .inputs{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .input-card{background:#fff8d6;border-radius:24px;padding:15px}
+    .input-card label{display:flex;align-items:center;gap:6px;color:#a16207;font-size:12px;font-weight:1000;letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px}
+    .input-wrap{display:flex;align-items:center;border-radius:18px;background:#fff;padding:12px 14px;box-shadow:inset 0 0 0 1px #fef3c7}
+    .input-wrap input{width:100%;border:0;outline:0;background:transparent;font-size:18px;font-weight:1000;color:#292524}
+    .input-wrap input::placeholder{color:#d6d3d1}
+    .suffix{font-size:12px;font-weight:1000;color:#a8a29e}
+    .two{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    .mood,.tip,.memo{border-radius:24px;padding:15px}
+    .mood{background:#fff8d6}
+    .tip{background:#ecfccb}
+    .small-label{display:block;color:#a16207;font-size:12px;font-weight:1000;letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px}
+    select,textarea{width:100%;border:0;outline:0;background:#fff;border-radius:18px;padding:13px 14px;box-shadow:inset 0 0 0 1px #f5f5f4;font-weight:750;color:#292524}
+    .tip p{margin:0;background:#fff;border-radius:18px;padding:13px 14px;font-size:14px;line-height:1.7;font-weight:700;color:#57534e}
+    .memo{background:#fafaf9;margin-top:12px}
+    .memo .small-label{color:#a8a29e}
+    textarea{min-height:110px;resize:vertical;font-size:14px;line-height:1.6;font-weight:600}
+    .goals{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
+    .goal{background:rgba(255,255,255,.82);border-radius:28px;padding:20px;box-shadow:var(--soft-shadow)}
+    .goal-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+    .goal-icon{width:48px;height:48px;background:var(--yellow);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:26px}
+    .goal h3{font-size:18px;margin:0;font-weight:1000}
+    .goal p{margin:0;color:#57534e;font-size:14px;line-height:1.7;font-weight:650}
+    .amber{background:#fef3c7;color:#78350f;border-color:#fde68a}
+    .orange{background:#ffedd5;color:#7c2d12;border-color:#fed7aa}
+    .lime{background:#ecfccb;color:#365314;border-color:#d9f99d}
+    .yellow{background:#fef9c3;color:#713f12;border-color:#fde047}
+    .green{background:#d1fae5;color:#064e3b;border-color:#a7f3d0}
+    .stone{background:#f5f5f4;color:#44403c;border-color:#e7e5e4}
+    .hidden{display:none!important}
+    @media (max-width: 980px){
+      .hero,.layout{grid-template-columns:1fr}
+      .metrics{grid-template-columns:repeat(2,1fr)}
+      .goals{grid-template-columns:1fr}
+      h1{font-size:46px}
+    }
+    @media (max-width: 620px){
+      main{padding:16px 12px 32px}
+      .card{padding:20px;border-radius:24px}
+      .inputs,.two{grid-template-columns:1fr}
+      .metrics{grid-template-columns:repeat(2,1fr)}
+      .metric-value{font-size:22px}
+      h1{font-size:40px}
+      .lead{font-size:15px}
+      .section-title{align-items:flex-start}
+      .day-inner{gap:9px}
+      .mini-emoji{padding:7px 9px}
+    }
+  </style>
+</head>
+<body>
+  <div class="blob b1"></div>
+  <div class="blob b2"></div>
+  <div class="blob b3"></div>
+
+  <main>
+    <section class="hero">
+      <div class="card">
+        <div class="chips">
+          <span class="chip chip-main">BONNIE 5/13 START</span>
+          <span class="chip chip-light">32 歲｜158cm｜65kg｜體脂 35%</span>
+          <button id="resetBtn" class="chip chip-reset">清空紀錄</button>
+        </div>
+
+        <h1>減脂打卡基地<br></h1>
+        <p class="lead">目標：8 月前降到 60kg 以下、體脂 30% 以下。這 4 週先把節奏養起來：重訓 3 天、羽球 1-2 天、Zone 2 有氧 1-2 天，蛋白質每天 100-120g。</p>
+
+        <div class="metrics">
+          <div class="metric"><div class="metric-label">🏆 完成率</div><div class="metric-value" id="progressPercent">0%</div></div>
+          <div class="metric"><div class="metric-label">✅ 完成天數</div><div class="metric-value" id="doneDays">0/28</div></div>
+          <div class="metric"><div class="metric-label">🍱 平均熱量</div><div><span class="metric-value" id="avgCalories">--</span><span class="metric-sub">kcal</span></div></div>
+          <div class="metric"><div class="metric-label">🥚 平均蛋白</div><div><span class="metric-value" id="avgProtein">--</span><span class="metric-sub">g</span></div></div>
+          <div class="metric"><div class="metric-label">🔥 運動消耗</div><div><span class="metric-value" id="totalBurn">--</span><span class="metric-sub">kcal</span></div></div>
+        </div>
+
+        <div class="progress-box">
+          <div class="progress-label">
+            <span>體重目標進度：65kg → 60kg</span>
+            <span id="weightLost">0.0 / 5.0 kg</span>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="weightBar"></div></div>
+        </div>
+      </div>
+
+      <div class="card dark">
+        <div class="today-head">
+          <div class="icon-box">💛</div>
+          <div>
+            <p class="eyebrow">Today Focus</p>
+            <h2 class="today-date" id="todayDate">5/13（三）</h2>
+          </div>
+        </div>
+
+        <div class="plan-pill" id="todayPill">
+          <div class="plan-flex">
+            <div class="plan-emoji" id="todayEmoji">🏋️‍♀️</div>
+            <div>
+              <p class="plan-tag" id="todayTag">力量日</p>
+              <h3 class="plan-title" id="todayTitle">重訓 A｜下半身＋背</h3>
+            </div>
+          </div>
+        </div>
+        <p class="today-note" id="todayNote">簽約後先輕量熟悉器材，不要練到爆痠。</p>
+        <div class="items" id="todayItems"></div>
+      </div>
+    </section>
+
+    <section class="layout">
+      <div class="card">
+        <div class="section-title">
+          <div>
+            <p>Weekly Plan</p>
+            <h2 id="weekTitle">第 1 週</h2>
+          </div>
+          <div>
+            <button class="navbtn" id="prevWeek">‹</button>
+            <button class="navbtn" id="nextWeek">›</button>
+          </div>
+        </div>
+        <div class="week-list" id="weekList"></div>
+      </div>
+
+      <div class="card">
+        <div class="section-title">
+          <div>
+            <p>Daily Check-in</p>
+            <h2 id="recordTitle">5/13（三） 紀錄</h2>
+          </div>
+          <button id="doneBtn" class="done-button">打卡完成</button>
+        </div>
+
+        <div class="inputs">
+          <div class="input-card">
+            <label>🍱 今日熱量</label>
+            <div class="input-wrap"><input id="calories" inputmode="decimal" placeholder="例：1500"><span class="suffix">kcal</span></div>
+          </div>
+          <div class="input-card">
+            <label>🥚 蛋白質</label>
+            <div class="input-wrap"><input id="protein" inputmode="decimal" placeholder="例：105"><span class="suffix">g</span></div>
+          </div>
+          <div class="input-card">
+            <label>🔥 手錶運動消耗</label>
+            <div class="input-wrap"><input id="burn" inputmode="decimal" placeholder="例：420"><span class="suffix">kcal</span></div>
+          </div>
+          <div class="input-card">
+            <label>⚖️ 早晨體重</label>
+            <div class="input-wrap"><input id="weight" inputmode="decimal" placeholder="例：64.6"><span class="suffix">kg</span></div>
+          </div>
+          <div class="input-card">
+            <label>📉 體脂率</label>
+            <div class="input-wrap"><input id="bodyFat" inputmode="decimal" placeholder="例：34.8"><span class="suffix">%</span></div>
+          </div>
+          <div class="input-card">
+            <label>💧 喝水量</label>
+            <div class="input-wrap"><input id="water" inputmode="decimal" placeholder="例：1800"><span class="suffix">ml</span></div>
+          </div>
+        </div>
+
+        <div class="two">
+          <div class="mood">
+            <label class="small-label">今天狀態</label>
+            <select id="mood">
+              <option value="">選一下</option>
+              <option>很有力！</option>
+              <option>普通，但有做就贏</option>
+              <option>有點累，降低強度</option>
+              <option>想躺平，但還是記錄</option>
+            </select>
+          </div>
+          <div class="tip">
+            <label class="small-label" style="color:#4d7c0f">今日小提醒</label>
+            <p>熱量不用完美，蛋白質先顧好。運動消耗不要全部吃回去，運動日多 100-200 kcal 就好。</p>
+          </div>
+        </div>
+
+        <div class="memo">
+          <label class="small-label">備註</label>
+          <textarea id="memo" placeholder="例：今天羽球打超累、晚餐吃自助餐、睡眠不足..."></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section class="goals">
+      <div class="goal">
+        <div class="goal-head"><div class="goal-icon">🍱</div><h3>飲食目標</h3></div>
+        <p>休息日 1350-1500 kcal；重訓日 1500-1600 kcal；羽球日 1600-1700 kcal。蛋白質每天 100-120g。</p>
+      </div>
+      <div class="goal">
+        <div class="goal-head"><div class="goal-icon">💛</div><h3>心率目標</h3></div>
+        <p>32 歲估算最大心率約 188。Zone 2 約 113-132 bpm，做有氧時穩穩維持就好。</p>
+      </div>
+      <div class="goal">
+        <div class="goal-head"><div class="goal-icon">🏆</div><h3>月底目標</h3></div>
+        <p>5/13 到 6/9 先目標 63-63.5kg，體脂往 33.5-34% 靠近。先穩，不要急。</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "bonnie_fitness_tracker_2026_0513_html";
+    const startDate = new Date("2026-05-13T00:00:00+08:00");
+
+    const planNotes = {
+      strengthA: { title: "重訓 A｜下半身＋背", tag: "力量日", emoji: "🏋️‍♀️", items: ["腿推機 4x10-12", "啞鈴羅馬尼亞硬舉 3x10", "坐姿划船 3x12", "滑輪下拉 3x10-12", "臀推/臀橋 3x12", "棒式 3x30秒"], className: "amber" },
+      strengthB: { title: "重訓 B｜胸肩＋臀腿", tag: "塑形日", emoji: "🍑", items: ["高腳杯深蹲 3x10-12", "胸推機 3x10-12", "肩推機 3x10", "腿後勾 3x12", "髖外展 3x15", "核心 3組"], className: "orange" },
+      strengthC: { title: "重訓 C｜全身燃脂", tag: "全身日", emoji: "🔥", items: ["輕重量硬舉 3x8-10", "分腿蹲 3x10/邊", "下拉 3x12", "胸推 3x12", "臀推 3x12", "有氧 15-20分鐘"], className: "lime" },
+      badminton: { title: "羽球日", tag: "快樂燃脂", emoji: "🏸", items: ["暖身 8-10 分鐘", "打球 60-120 分鐘", "記錄手錶消耗", "結束後補蛋白質"], className: "yellow" },
+      cardio: { title: "Zone 2 有氧", tag: "穩定燃脂", emoji: "💛", items: ["快走/腳踏車/滑步機 35-45 分鐘", "32歲估算 Zone 2 約 113-132 bpm", "可以講話但不能唱歌", "不用把消耗全吃回去"], className: "green" },
+      rest: { title: "休息＋走路", tag: "恢復日", emoji: "🌙", items: ["步數 6000-8000", "伸展 10 分鐘", "早點睡", "不要因為休息就少吃蛋白質"], className: "stone" }
+    };
+
+    const dayPlans = [
+      { type: "strengthA", note: "簽約後先輕量熟悉器材，不要練到爆痠。" },
+      { type: "cardio", note: "輕鬆流汗即可，建立習慣比燃爆重要。" },
+      { type: "badminton", note: "有打羽球就打球；沒打改重訓 A。" },
+      { type: "rest", note: "走路＋放鬆，讓身體恢復。" },
+      { type: "strengthB", note: "全程保留 2-3 下餘力。" },
+      { type: "badminton", note: "週一羽球日；沒打就快走 40 分鐘。" },
+      { type: "strengthA", note: "第 2 週開始進入正式節奏。" },
+      { type: "cardio", note: "Zone 2 35-45 分鐘。" },
+      { type: "strengthB", note: "胸肩臀腿，重量穩定即可。" },
+      { type: "badminton", note: "週五不定期羽球；沒打改輕有氧 30 分鐘。" },
+      { type: "rest", note: "散步、伸展、補睡眠。" },
+      { type: "strengthC", note: "全身燃脂＋核心。" },
+      { type: "badminton", note: "有打就羽球，沒打改快走。" },
+      { type: "strengthA", note: "嘗試比上週多 1-2kg 或多 1-2 下。" },
+      { type: "cardio", note: "穩定心率，不需要衝刺。" },
+      { type: "strengthB", note: "動作漂亮比重量大重要。" },
+      { type: "badminton", note: "有羽球就記錄消耗；沒羽球輕有氧。" },
+      { type: "rest", note: "恢復日，熱量不用低到崩潰。" },
+      { type: "strengthC", note: "把核心和臀腿做紮實。" },
+      { type: "badminton", note: "羽球日，打完記得吃蛋白質。" },
+      { type: "strengthA", note: "本週穩住，不用突然加很多。" },
+      { type: "cardio", note: "Zone 2 35-45 分鐘。" },
+      { type: "strengthB", note: "訓練後 2 小時內吃一餐完整蛋白質。" },
+      { type: "badminton", note: "有羽球就打；沒打就輕有氧＋伸展。" },
+      { type: "rest", note: "檢查腰圍、體重週平均。" },
+      { type: "strengthC", note: "月底檢查：完成率比完美更重要。" },
+      { type: "badminton", note: "最後一週開始，延續節奏。" },
+      { type: "strengthA", note: "如果精神好，主要動作加一點重量。" }
+    ];
+
+    const initialLog = dayPlans.map((p, i) => ({
+      id: i, done: false, calories: "", protein: "", burn: "", weight: "", bodyFat: "", water: "", mood: "", memo: "", ...p
+    }));
+
+    let logs = loadLogs();
+    let selected = 0;
+    let viewWeek = 1;
+
+    const fields = ["calories","protein","burn","weight","bodyFat","water","mood","memo"];
+
+    function loadLogs(){
+      try{
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if(!saved) return structuredClone(initialLog);
+        const parsed = JSON.parse(saved);
+        if(!Array.isArray(parsed) || parsed.length !== initialLog.length) return structuredClone(initialLog);
+        return initialLog.map((base, i) => ({...base, ...parsed[i]}));
+      }catch(e){
+        return structuredClone(initialLog);
+      }
+    }
+
+    function saveLogs(){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+    }
+
+    function formatDate(offset){
+      const d = new Date(startDate);
+      d.setDate(d.getDate() + offset);
+      const weekdays = ["日","一","二","三","四","五","六"];
+      return `${d.getMonth()+1}/${d.getDate()}（${weekdays[d.getDay()]}）`;
+    }
+
+    function getWeek(offset){ return Math.floor(offset / 7) + 1; }
+
+    function avg(nums){
+      const arr = nums.map(Number).filter(Boolean);
+      if(!arr.length) return 0;
+      return Math.round(arr.reduce((a,b)=>a+b,0) / arr.length);
+    }
+
+    function render(){
+      const current = logs[selected];
+      const detail = planNotes[current.type];
+
+      document.getElementById("todayDate").textContent = formatDate(selected);
+      document.getElementById("recordTitle").textContent = `${formatDate(selected)} 紀錄`;
+      document.getElementById("todayEmoji").textContent = detail.emoji;
+      document.getElementById("todayTag").textContent = detail.tag;
+      document.getElementById("todayTitle").textContent = detail.title;
+      document.getElementById("todayNote").textContent = current.note;
+
+      const pill = document.getElementById("todayPill");
+      pill.className = `plan-pill ${detail.className}`;
+
+      const items = document.getElementById("todayItems");
+      items.innerHTML = detail.items.map(item => `<div class="item"><span>✨</span><span>${item}</span></div>`).join("");
+
+      fields.forEach(field => {
+        document.getElementById(field).value = current[field] || "";
+      });
+
+      const doneBtn = document.getElementById("doneBtn");
+      doneBtn.textContent = current.done ? "已完成" : "打卡完成";
+      doneBtn.className = current.done ? "done-button done" : "done-button";
+
+      const doneCount = logs.filter(l => l.done).length;
+      const progress = Math.round((doneCount / logs.length) * 100);
+      const avgCalories = avg(logs.map(l => l.calories));
+      const avgProtein = avg(logs.map(l => l.protein));
+      const totalBurn = logs.reduce((sum, l) => sum + (Number(l.burn) || 0), 0);
+      const weights = logs.map(l => Number(l.weight)).filter(Boolean);
+      const latestWeight = weights.length ? weights[weights.length - 1] : 65;
+      const lost = Math.max(0, 65 - latestWeight);
+      const weightProgress = Math.min(100, Math.max(0, Math.round((lost / 5) * 100)));
+
+      document.getElementById("progressPercent").textContent = `${progress}%`;
+      document.getElementById("doneDays").textContent = `${doneCount}/28`;
+      document.getElementById("avgCalories").textContent = avgCalories ? String(avgCalories) : "--";
+      document.getElementById("avgProtein").textContent = avgProtein ? String(avgProtein) : "--";
+      document.getElementById("totalBurn").textContent = totalBurn ? String(totalBurn) : "--";
+      document.getElementById("weightLost").textContent = `${lost.toFixed(1)} / 5.0 kg`;
+      document.getElementById("weightBar").style.width = `${weightProgress}%`;
+
+      document.getElementById("weekTitle").textContent = `第 ${viewWeek} 週`;
+      renderWeek();
+    }
+
+    function renderWeek(){
+      const weekList = document.getElementById("weekList");
+      const weekLogs = logs.filter(l => getWeek(l.id) === viewWeek);
+      weekList.innerHTML = weekLogs.map(log => {
+        const d = planNotes[log.type];
+        return `
+          <button class="day-btn ${selected === log.id ? "active" : ""}" data-id="${log.id}">
+            <div class="day-inner">
+              <span class="check ${log.done ? "done" : ""}" data-check="${log.id}">${log.done ? "✓" : "+"}</span>
+              <div class="mini-emoji ${d.className}">${d.emoji}</div>
+              <div style="min-width:0;flex:1">
+                <div class="day-title-line">
+                  <p class="day-date">${formatDate(log.id)}</p>
+                  <span class="tag">${d.tag}</span>
+                </div>
+                <p class="day-sub">${d.title}</p>
+              </div>
+            </div>
+          </button>
+        `;
+      }).join("");
+
+      document.querySelectorAll(".day-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          selected = Number(btn.dataset.id);
+          render();
+        });
+      });
+      document.querySelectorAll("[data-check]").forEach(check => {
+        check.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const id = Number(check.dataset.check);
+          logs[id].done = !logs[id].done;
+          saveLogs();
+          render();
+        });
+      });
+    }
+
+    document.getElementById("prevWeek").addEventListener("click", () => {
+      viewWeek = Math.max(1, viewWeek - 1);
+      render();
+    });
+
+    document.getElementById("nextWeek").addEventListener("click", () => {
+      viewWeek = Math.min(4, viewWeek + 1);
+      render();
+    });
+
+    document.getElementById("doneBtn").addEventListener("click", () => {
+      logs[selected].done = !logs[selected].done;
+      saveLogs();
+      render();
+    });
+
+    document.getElementById("resetBtn").addEventListener("click", () => {
+      if(confirm("確定要清空所有紀錄嗎？")){
+        logs = structuredClone(initialLog);
+        selected = 0;
+        viewWeek = 1;
+        saveLogs();
+        render();
+      }
+    });
+
+    fields.forEach(field => {
+      document.getElementById(field).addEventListener("input", e => {
+        logs[selected][field] = e.target.value;
+        saveLogs();
+        renderHeaderOnly();
+      });
+    });
+
+    function renderHeaderOnly(){
+      const doneCount = logs.filter(l => l.done).length;
+      const progress = Math.round((doneCount / logs.length) * 100);
+      const avgCalories = avg(logs.map(l => l.calories));
+      const avgProtein = avg(logs.map(l => l.protein));
+      const totalBurn = logs.reduce((sum, l) => sum + (Number(l.burn) || 0), 0);
+      const weights = logs.map(l => Number(l.weight)).filter(Boolean);
+      const latestWeight = weights.length ? weights[weights.length - 1] : 65;
+      const lost = Math.max(0, 65 - latestWeight);
+      const weightProgress = Math.min(100, Math.max(0, Math.round((lost / 5) * 100)));
+
+      document.getElementById("progressPercent").textContent = `${progress}%`;
+      document.getElementById("doneDays").textContent = `${doneCount}/28`;
+      document.getElementById("avgCalories").textContent = avgCalories ? String(avgCalories) : "--";
+      document.getElementById("avgProtein").textContent = avgProtein ? String(avgProtein) : "--";
+      document.getElementById("totalBurn").textContent = totalBurn ? String(totalBurn) : "--";
+      document.getElementById("weightLost").textContent = `${lost.toFixed(1)} / 5.0 kg`;
+      document.getElementById("weightBar").style.width = `${weightProgress}%`;
+    }
+
+    render();
+  </script>
+</body>
+</html>
