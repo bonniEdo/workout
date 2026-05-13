@@ -134,6 +134,7 @@
     .green{background:#d1fae5;color:#064e3b;border-color:#a7f3d0}
     .stone{background:#f5f5f4;color:#44403c;border-color:#e7e5e4}
     .hidden{display:none!important}
+    .mobile-tabs{display:none}
     @media (max-width: 980px){
       .hero,.layout{grid-template-columns:1fr}
       .weight-panel{grid-template-columns:1fr}
@@ -142,8 +143,30 @@
       h1{font-size:46px}
     }
     @media (max-width: 620px){
-      main{padding:16px 12px 32px}
+      body{padding-bottom:82px}
+      main{padding:16px 12px 24px}
       .card{padding:20px;border-radius:24px}
+      .blob{display:none}
+      .hero{display:block;margin-bottom:0}
+      .hero,.layout,.weight-section,.goals{margin-top:0}
+      .layout{display:block}
+      body[data-mobile-page="today"] .layout,
+      body[data-mobile-page="today"] .weight-section,
+      body[data-mobile-page="today"] .goals,
+      body[data-mobile-page="plan"] .hero,
+      body[data-mobile-page="plan"] .checkin-card,
+      body[data-mobile-page="plan"] .weight-section,
+      body[data-mobile-page="plan"] .goals,
+      body[data-mobile-page="checkin"] .hero,
+      body[data-mobile-page="checkin"] .plan-card,
+      body[data-mobile-page="checkin"] .weight-section,
+      body[data-mobile-page="checkin"] .goals,
+      body[data-mobile-page="weight"] .hero,
+      body[data-mobile-page="weight"] .layout,
+      body[data-mobile-page="weight"] .goals,
+      body[data-mobile-page="goals"] .hero,
+      body[data-mobile-page="goals"] .layout,
+      body[data-mobile-page="goals"] .weight-section{display:none}
       .inputs,.two{grid-template-columns:1fr}
       .meal-group{grid-template-columns:1fr}
       .metrics{grid-template-columns:repeat(2,1fr)}
@@ -156,10 +179,48 @@
       .weight-table-wrap{max-height:420px}
       .day-inner{gap:9px}
       .mini-emoji{padding:7px 9px}
+      .chips{gap:8px;margin-bottom:14px}
+      .chip{padding:9px 12px}
+      .progress-box{margin-top:16px}
+      .today-head{margin-bottom:14px}
+      .items{gap:7px}
+      .item{padding:9px 11px}
+      .mobile-tabs{
+        position:fixed;
+        left:10px;
+        right:10px;
+        bottom:10px;
+        z-index:10;
+        display:grid;
+        grid-template-columns:repeat(5,1fr);
+        gap:4px;
+        padding:7px;
+        border-radius:24px;
+        background:rgba(255,255,255,.92);
+        box-shadow:0 16px 45px rgba(41,37,36,.18);
+        backdrop-filter:blur(16px);
+      }
+      .tab-btn{
+        min-width:0;
+        border:0;
+        border-radius:18px;
+        background:transparent;
+        color:#78716c;
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        justify-content:center;
+        gap:3px;
+        padding:8px 2px;
+        font-size:11px;
+        font-weight:1000;
+      }
+      .tab-btn span:first-child{font-size:18px;line-height:1}
+      .tab-btn.active{background:#292524;color:#fff}
     }
   </style>
 </head>
-<body>
+<body data-mobile-page="today">
   <div class="blob b1"></div>
   <div class="blob b2"></div>
   <div class="blob b3"></div>
@@ -217,7 +278,7 @@
     </section>
 
     <section class="layout">
-      <div class="card">
+      <div class="card plan-card">
         <div class="section-title">
           <div>
             <p>Weekly Plan</p>
@@ -231,7 +292,7 @@
         <div class="week-list" id="weekList"></div>
       </div>
 
-      <div class="card">
+      <div class="card checkin-card">
         <div class="section-title">
           <div>
             <p>Daily Check-in</p>
@@ -350,6 +411,14 @@
     </section>
   </main>
 
+  <nav class="mobile-tabs" aria-label="手機版分頁">
+    <button class="tab-btn active" data-page="today" aria-current="page"><span>💛</span><span>今日</span></button>
+    <button class="tab-btn" data-page="plan"><span>📅</span><span>計畫</span></button>
+    <button class="tab-btn" data-page="checkin"><span>✅</span><span>紀錄</span></button>
+    <button class="tab-btn" data-page="weight"><span>📉</span><span>體重</span></button>
+    <button class="tab-btn" data-page="goals"><span>🏆</span><span>目標</span></button>
+  </nav>
+
   <script>
     const STORAGE_KEY = "bonnie_fitness_tracker_2026_0513_html";
     const startDate = new Date("2026-05-13T00:00:00+08:00");
@@ -404,6 +473,7 @@
     let logs = loadLogs();
     let selected = 0;
     let viewWeek = 1;
+    let mobilePage = "today";
 
     function loadLogs(){
       try{
@@ -627,6 +697,9 @@
       document.querySelectorAll(".day-btn").forEach(btn => {
         btn.addEventListener("click", () => {
           selected = Number(btn.dataset.id);
+          if(window.matchMedia("(max-width: 620px)").matches){
+            setMobilePage("checkin");
+          }
           render();
         });
       });
@@ -668,10 +741,26 @@
         logs = structuredClone(initialLog);
         selected = 0;
         viewWeek = 1;
+        setMobilePage("today");
         saveLogs();
         updateSaveStatus(savedNowText());
         render();
       }
+    });
+
+    function setMobilePage(page){
+      mobilePage = page;
+      document.body.dataset.mobilePage = page;
+      document.querySelectorAll(".tab-btn").forEach(btn => {
+        const active = btn.dataset.page === page;
+        btn.classList.toggle("active", active);
+        btn.setAttribute("aria-current", active ? "page" : "false");
+      });
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.querySelectorAll(".tab-btn").forEach(btn => {
+      btn.addEventListener("click", () => setMobilePage(btn.dataset.page));
     });
 
     fields.forEach(field => {
