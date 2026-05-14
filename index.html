@@ -153,6 +153,12 @@
     .day-date{font-weight:1000;margin:0}
     .tag{border-radius:999px;background:#f5f5f4;color:#78716c;font-size:10px;font-weight:900;padding:5px 8px}
     .day-sub{margin:3px 0 0;color:#78716c;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .plan-detail{background:#fff;border-radius:24px;padding:16px;box-shadow:var(--soft-shadow)}
+    .plan-detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+    .plan-detail-title h3{font-size:20px;margin:0 0 4px;font-weight:1000}
+    .plan-detail-title p{margin:0;color:#78716c;font-size:13px;font-weight:750}
+    .plan-detail-list{margin:0;padding-left:18px;color:#57534e;font-size:14px;line-height:1.8;font-weight:700}
+    .plan-detail-note{margin:12px 0 0;background:#fff8d6;border-radius:16px;padding:12px;color:#57534e;font-size:13px;line-height:1.6;font-weight:750}
     .record-actions{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
     .save-button{border:0;border-radius:999px;padding:12px 18px;font-size:14px;font-weight:1000;background:var(--yellow);color:#422006}
     .done-button{border:0;border-radius:999px;padding:12px 18px;font-size:14px;font-weight:1000;background:#1c1917;color:#fff}
@@ -387,6 +393,10 @@
       .week-days{gap:3px;margin-bottom:8px}
       .week-day{font-size:9px;line-height:1.25;padding:6px 1px}
       .day-btn{border-radius:20px;padding:12px}
+      .plan-detail{border-radius:20px;padding:13px}
+      .plan-detail-head{display:block}
+      .plan-detail-title h3{font-size:18px}
+      .plan-detail-list{font-size:13px}
       .check{width:38px;height:38px;border-radius:14px}
       .mini-emoji{padding:7px 9px}
       .chips{gap:8px;margin-bottom:14px}
@@ -802,8 +812,8 @@
             </summary>
             <div class="group-body">
               <div class="memo">
-                <label class="small-label">實際做了什麼</label>
-                <textarea id="actualWorkout" placeholder="寫下今天實際完成的內容..."></textarea>
+                <label class="small-label">訓練備忘 / 身體感受</label>
+                <textarea id="actualWorkout" placeholder="例：肩推狀態很好、下背有點緊、器材被佔所以改做啞鈴版..."></textarea>
               </div>
 
               <div class="memo">
@@ -1806,6 +1816,8 @@
         const dayLog = weekLogs.find(log => formatMonthDay(getDateForOffset(log.id)) === formatMonthDay(dayDate));
         return `<div class="week-day ${dayLog ? "has-plan" : ""}">週${label}<br>${formatMonthDay(dayDate)}</div>`;
       }).join("");
+      const selectedPlan = weekLogs.some(log => log.id === selected) ? logs[selected] : weekLogs[0];
+      const selectedDetail = planNotes[selectedPlan.type];
       weekList.innerHTML = `<div class="week-days">${weekDays}</div>` + weekLogs.map(log => {
         const d = planNotes[log.type];
         return `
@@ -1823,14 +1835,25 @@
             </div>
           </button>
         `;
-      }).join("");
+      }).join("") + `
+        <div class="plan-detail">
+          <div class="plan-detail-head">
+            <div class="plan-detail-title">
+              <h3>${formatDate(selectedPlan.id)}｜${selectedDetail.title}</h3>
+              <p>${selectedDetail.emoji} ${selectedDetail.tag}</p>
+            </div>
+            <button class="history-edit" data-plan-record="${selectedPlan.id}">去紀錄這天</button>
+          </div>
+          <ul class="plan-detail-list">
+            ${selectedDetail.items.map(item => `<li>${escapeHtml(item)}</li>`).join("")}
+          </ul>
+          <p class="plan-detail-note">${escapeHtml(selectedPlan.note)}</p>
+        </div>
+      `;
 
       document.querySelectorAll(".day-btn").forEach(btn => {
         btn.addEventListener("click", () => {
           selected = Number(btn.dataset.id);
-          if(window.matchMedia("(max-width: 620px)").matches){
-            setMobilePage("checkin");
-          }
           render();
         });
       });
@@ -1840,6 +1863,13 @@
           const id = Number(check.dataset.check);
           logs[id].done = !logs[id].done;
           saveLogs();
+          render();
+        });
+      });
+      document.querySelectorAll("[data-plan-record]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          selected = Number(btn.dataset.planRecord);
+          setMobilePage("checkin");
           render();
         });
       });
@@ -1956,8 +1986,8 @@
                 ${customList}
               </div>
               <div class="history-box">
-                <h4>實際紀錄</h4>
-                <p>${log.actualWorkout ? escapeHtml(log.actualWorkout) : "還沒有記錄實際做了什麼。"}</p>
+                <h4>訓練備忘</h4>
+                <p>${log.actualWorkout ? escapeHtml(log.actualWorkout) : "還沒有記錄訓練感受。"}</p>
               </div>
               <div class="history-box">
                 <h4>狀態</h4>
