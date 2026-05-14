@@ -88,6 +88,12 @@
     .item input:checked + .item-check{background:#bef264;border-color:#bef264}
     .item input:checked + .item-check::after{content:"✓"}
     .item input:checked ~ .item-text{color:#a8a29e;text-decoration:line-through}
+    .recommended-workouts{margin-top:12px}
+    .recommended-workouts summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;margin-bottom:10px}
+    .recommended-workouts summary::-webkit-details-marker{display:none}
+    .recommended-workouts summary::after{content:"收起";border-radius:999px;background:rgba(255,255,255,.12);color:#d6d3d1;padding:5px 9px;font-size:11px;font-weight:1000;flex:0 0 auto}
+    .recommended-workouts:not([open]) summary::after{content:"展開"}
+    .recommended-workouts summary p{margin:0;color:#fde68a;font-size:12px;font-weight:1000;letter-spacing:.16em;text-transform:uppercase}
     .custom-workouts{margin-top:14px;border-top:1px solid rgba(255,255,255,.16);padding-top:14px}
     .custom-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}
     .custom-head p{margin:0;color:#fde68a;font-size:12px;font-weight:1000;letter-spacing:.16em;text-transform:uppercase}
@@ -383,6 +389,9 @@
       .items{gap:7px}
       .item{padding:11px;border-radius:16px;min-height:46px}
       .item-check{width:24px;height:24px;flex-basis:24px}
+      .recommended-workouts{margin-top:10px}
+      .recommended-workouts summary{margin-bottom:8px}
+      .recommended-workouts summary p{font-size:11px;letter-spacing:.12em}
       .custom-workouts{margin-top:12px;padding-top:12px}
       .custom-workout-form{grid-template-columns:1fr;gap:7px}
       .custom-workout-form button{min-height:44px}
@@ -629,7 +638,10 @@
           </div>
         </div>
         <p class="today-note" id="todayNote">簽約後先輕量熟悉器材，不要練到爆痠。</p>
-        <div class="items" id="todayItems"></div>
+        <details class="recommended-workouts" open>
+          <summary><p>推薦菜單</p></summary>
+          <div class="items" id="todayItems"></div>
+        </details>
         <div class="custom-workouts">
           <div class="custom-head">
             <p>自由運動</p>
