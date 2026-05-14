@@ -36,9 +36,23 @@
     .chip{border:0;border-radius:999px;padding:10px 15px;font-size:12px;font-weight:900;letter-spacing:.12em}
     .chip-main{background:var(--yellow);color:#422006}
     .chip-light{background:#fff;color:#57534e;box-shadow:0 4px 12px rgba(0,0,0,.06)}
-    .chip-reset{background:#f5f5f4;color:#78716c}
     h1{font-size:62px;line-height:.98;margin:0;font-weight:1000;letter-spacing:-.055em}
     .lead{font-size:17px;line-height:1.8;max-width:760px;color:#57534e;font-weight:650}
+    .status-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:18px}
+    .status-card{background:#fff;border-radius:22px;padding:15px;box-shadow:var(--soft-shadow)}
+    .status-card details{display:block}
+    .status-card summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer}
+    .status-card summary::-webkit-details-marker{display:none}
+    .status-card summary::after{content:"查看";border-radius:999px;background:#f5f5f4;color:#78716c;padding:5px 9px;font-size:11px;font-weight:1000;flex:0 0 auto}
+    .status-card details[open] summary::after{content:"收起"}
+    .start-status-body{margin-top:12px}
+    .status-label{font-size:11px;font-weight:1000;letter-spacing:.14em;text-transform:uppercase;color:#a8a29e;margin:0 0 8px}
+    summary .status-label{display:block}
+    summary .status-note{display:block;margin:4px 0 0}
+    .status-values{display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
+    .status-main{font-size:24px;font-weight:1000}
+    .status-sub{font-size:15px;font-weight:1000;color:#15803d}
+    .status-note{font-size:12px;font-weight:800;color:#78716c;margin:6px 0 0;line-height:1.5}
     .metrics{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:22px}
     .metric{background:#fff;border-radius:24px;padding:16px;box-shadow:var(--soft-shadow)}
     .metric-label{display:flex;gap:6px;align-items:center;color:#a8a29e;font-size:12px;font-weight:950;letter-spacing:.08em;margin-bottom:6px}
@@ -59,12 +73,46 @@
     .plan-title{font-size:20px;font-weight:1000;margin:2px 0 0}
     .today-note{font-size:14px;line-height:1.7;color:#d6d3d1}
     .items{display:grid;gap:8px}
-    .item{background:rgba(255,255,255,.1);border-radius:18px;padding:10px 12px;font-size:14px;display:flex;gap:8px;align-items:center}
+    .item{background:rgba(255,255,255,.1);border-radius:18px;padding:10px 12px;font-size:14px;display:flex;gap:10px;align-items:center;color:#fff}
+    .item > input{position:absolute;opacity:0;pointer-events:none}
+    .item-check{width:22px;height:22px;flex:0 0 22px;border-radius:8px;border:2px solid rgba(255,255,255,.45);display:flex;align-items:center;justify-content:center;color:#1c1917;font-size:15px;font-weight:1000;line-height:1}
+    .item-text{line-height:1.45;transition:.15s}
+    .item:has(input:checked){background:rgba(190,242,100,.18)}
+    .item input:checked + .item-check{background:#bef264;border-color:#bef264}
+    .item input:checked + .item-check::after{content:"✓"}
+    .item input:checked ~ .item-text{color:#a8a29e;text-decoration:line-through}
+    .custom-workouts{margin-top:14px;border-top:1px solid rgba(255,255,255,.16);padding-top:14px}
+    .custom-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}
+    .custom-head p{margin:0;color:#fde68a;font-size:12px;font-weight:1000;letter-spacing:.16em;text-transform:uppercase}
+    .custom-workout-form{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:10px}
+    .custom-workout-form input{min-width:0;border:0;outline:0;border-radius:16px;background:rgba(255,255,255,.12);color:#fff;padding:12px 13px;font-size:14px;font-weight:800}
+    .custom-workout-form input::placeholder{color:#a8a29e}
+    .custom-workout-form button,.custom-delete{border:0;border-radius:16px;background:#bef264;color:#365314;font-size:13px;font-weight:1000;padding:0 14px}
+    .custom-delete{margin-left:auto;background:rgba(255,255,255,.12);color:#d6d3d1;align-self:stretch;min-width:42px;padding:0 10px}
+    .workout-item,.custom-item{padding:0;overflow:hidden;align-items:stretch}
+    .custom-item{position:relative}
+    .workout-toggle,.custom-toggle{display:flex;align-items:center;gap:10px;min-width:0;flex:1;padding:10px 12px;cursor:pointer}
+    .workout-toggle input,.custom-toggle input{position:absolute;opacity:0;pointer-events:none}
+    .workout-toggle input:checked + .item-check,.custom-toggle input:checked + .item-check{background:#bef264;border-color:#bef264}
+    .workout-toggle input:checked + .item-check::after,.custom-toggle input:checked + .item-check::after{content:"✓"}
+    .workout-toggle input:checked ~ .item-text,.custom-toggle input:checked ~ .item-text{color:#a8a29e;text-decoration:line-through}
+    .workout-item:has(.workout-toggle input:checked),.custom-item:has(.custom-toggle input:checked){background:rgba(190,242,100,.18)}
+    .load-wrap{display:flex;align-items:center;gap:6px;padding:8px 10px 8px 0;flex:0 0 auto}
+    .load-input{width:64px;border:0;outline:0;border-radius:13px;background:rgba(255,255,255,.14);color:#fff;padding:9px 8px;font-size:13px;font-weight:1000;text-align:center}
+    .load-input::placeholder{color:#a8a29e}
+    .load-unit{font-size:11px;font-weight:1000;color:#a8a29e}
+    .pb-badge{border-radius:999px;background:rgba(190,242,100,.16);color:#d9f99d;padding:5px 7px;font-size:10px;font-weight:1000;white-space:nowrap}
+    .custom-empty{margin:0;color:#a8a29e;font-size:13px;line-height:1.6;font-weight:700}
+    .mobile-quick-actions{display:none}
     .layout{display:grid;grid-template-columns:.9fr 1.1fr;gap:18px}
     .section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
     .section-title p{font-size:12px;font-weight:1000;letter-spacing:.22em;text-transform:uppercase;color:#a8a29e;margin:0 0 4px}
     .section-title h2{font-size:26px;margin:0;font-weight:1000}
     .navbtn{width:40px;height:40px;border-radius:999px;border:0;background:#fff;font-size:24px;font-weight:1000;box-shadow:var(--soft-shadow)}
+    .navbtn:disabled{opacity:.35;cursor:not-allowed}
+    .week-days{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:10px}
+    .week-day{border-radius:999px;background:#f5f5f4;color:#78716c;text-align:center;padding:7px 2px;font-size:11px;font-weight:1000}
+    .week-day.has-plan{background:#fff3b0;color:#713f12}
     .week-list{display:grid;gap:10px}
     .day-btn{width:100%;text-align:left;border:1px solid transparent;border-radius:24px;background:#fff;padding:14px;transition:.15s;box-shadow:0 4px 14px rgba(0,0,0,.035)}
     .day-btn:hover{transform:scale(1.01)}
@@ -82,6 +130,16 @@
     .done-button{border:0;border-radius:999px;padding:12px 18px;font-size:14px;font-weight:1000;background:#1c1917;color:#fff}
     .done-button.done{background:#bef264;color:#365314}
     .save-status{width:100%;text-align:right;font-size:12px;font-weight:900;color:#a8a29e}
+    .checkin-groups{display:grid;gap:12px}
+    .checkin-group{background:#fff;border-radius:24px;box-shadow:var(--soft-shadow);overflow:hidden}
+    .checkin-group summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:15px 16px;cursor:pointer}
+    .checkin-group summary::-webkit-details-marker{display:none}
+    .checkin-group summary::after{content:"展開";border-radius:999px;background:#f5f5f4;color:#78716c;padding:6px 10px;font-size:11px;font-weight:1000;flex:0 0 auto}
+    .checkin-group[open] summary::after{content:"收起"}
+    .group-title{min-width:0}
+    .group-title p{margin:0 0 3px;color:#a8a29e;font-size:11px;font-weight:1000;letter-spacing:.14em;text-transform:uppercase}
+    .group-title h3{margin:0;font-size:18px;font-weight:1000;color:#292524}
+    .group-body{padding:0 16px 16px}
     .inputs{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
     .meal-group{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
     .meal-total{grid-column:1/-1;background:#fff;border-radius:18px;padding:12px 14px;box-shadow:inset 0 0 0 1px #fef3c7;font-weight:1000;display:flex;justify-content:space-between;align-items:center;color:#292524}
@@ -104,29 +162,86 @@
     .memo .small-label{color:#a8a29e}
     textarea{min-height:110px;resize:vertical;font-size:14px;line-height:1.6;font-weight:600}
     .weight-section{margin-top:18px}
-    .weight-panel{display:grid;grid-template-columns:1fr 1.2fr;gap:16px;align-items:stretch}
+    .weight-panel{display:grid;gap:14px}
     .weight-chart{min-height:280px;background:#fff;border-radius:24px;padding:14px;box-shadow:inset 0 0 0 1px #fef3c7}
     .weight-chart svg{width:100%;height:100%;min-height:250px;display:block}
     .weight-chart text{font-size:11px;font-weight:800;fill:#78716c}
     .chart-grid{stroke:#e7e5e4;stroke-width:1}
     .chart-target{fill:none;stroke:#a8a29e;stroke-width:3;stroke-dasharray:7 7}
     .chart-line{fill:none;stroke:#f59e0b;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
+    .chart-fat-line{fill:none;stroke:#16a34a;stroke-width:4;stroke-linecap:round;stroke-linejoin:round}
     .chart-dot{fill:#292524;stroke:#fff;stroke-width:3}
-    .weight-table-wrap{max-height:360px;overflow:auto;border-radius:24px;background:#fff;box-shadow:inset 0 0 0 1px #fef3c7}
-    .weight-table{width:100%;border-collapse:collapse;font-size:14px}
-    .weight-table th,.weight-table td{padding:11px 12px;border-bottom:1px solid #f5f5f4;text-align:left}
-    .weight-table th{position:sticky;top:0;background:#fff8d6;color:#a16207;font-size:11px;font-weight:1000;letter-spacing:.14em;text-transform:uppercase;z-index:1}
-    .weight-table tr:last-child td{border-bottom:0}
+    .chart-fat-dot{fill:#16a34a;stroke:#fff;stroke-width:3}
+    .chart-legend text{font-size:12px;font-weight:1000}
     .weight-input{width:92px;border:0;outline:0;border-radius:14px;background:#fff8d6;padding:9px 10px;font-weight:1000;color:#292524}
+    .bodyfat-input{width:82px;border:0;outline:0;border-radius:14px;background:#ecfccb;padding:9px 10px;font-weight:1000;color:#292524}
+    .input-wrap .weight-input,.input-wrap .bodyfat-input{width:100%;min-width:0}
     .weight-delta{font-weight:1000;color:#78716c}
     .weight-delta.good{color:#15803d}
     .weight-delta.up{color:#b45309}
+    .weight-quick{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;background:#fff;border-radius:24px;padding:16px;box-shadow:var(--soft-shadow)}
+    .weight-quick .input-card{padding:12px;border-radius:18px}
+    .weight-quick-summary{background:#fafaf9;border-radius:18px;padding:13px 14px;display:flex;flex-direction:column;justify-content:center;gap:4px}
+    .weight-quick-summary span{min-width:0;overflow-wrap:anywhere}
+    .weight-quick-summary span:first-child{font-size:11px;font-weight:1000;letter-spacing:.12em;text-transform:uppercase;color:#a8a29e}
+    .weight-quick-summary span:last-child{font-size:18px;font-weight:1000;color:#292524}
+    .weight-calendar-wrap{background:#fff;border-radius:24px;padding:16px;box-shadow:var(--soft-shadow)}
+    .weight-calendar-wrap,.calendar-month,.history-section,.weight-section{min-width:0}
+    .weight-calendar .calendar-cell.has-measure{background:#fff8d6;border-color:#fde68a}
+    .weight-calendar .calendar-cell.has-measure.done{background:#ecfccb;border-color:#d9f99d}
+    .weight-calendar .calendar-check{white-space:nowrap}
+    .weight-detail{background:#fff;border-radius:24px;padding:16px;box-shadow:var(--soft-shadow)}
+    .weight-detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+    .weight-detail-title h3{font-size:20px;margin:0 0 4px;font-weight:1000}
+    .weight-detail-title p{margin:0;color:#78716c;font-size:13px;font-weight:750}
+    .weight-detail-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .history-section{margin-top:18px}
+    .history-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px}
+    .history-toolbar .navbtn{flex:0 0 40px}
+    .history-month-title{font-size:18px;font-weight:1000;margin:0;text-align:center;flex:1;min-width:0}
+    .calendar-month{background:#fff;border-radius:24px;padding:16px;box-shadow:var(--soft-shadow)}
+    .calendar-weekdays,.calendar-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+    .calendar-weekdays{margin-bottom:6px;color:#a8a29e;font-size:11px;font-weight:1000;text-align:center}
+    .calendar-cell,.calendar-empty,.calendar-off{min-height:74px;border-radius:18px}
+    .calendar-cell{width:100%;min-width:0;border:1px solid #f5f5f4;background:#fafaf9;padding:8px;text-align:left;display:flex;flex-direction:column;gap:5px;transition:.15s;overflow:hidden}
+    .calendar-off{background:#fafaf9;color:#d6d3d1;padding:8px;font-size:13px;font-weight:1000}
+    .calendar-cell:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(0,0,0,.08)}
+    .calendar-cell.active{background:#292524;color:#fff;border-color:#292524}
+    .calendar-cell.done{background:#ecfccb;border-color:#d9f99d}
+    .calendar-cell.done.active{background:#292524;border-color:#292524}
+    .calendar-date{font-size:15px;font-weight:1000}
+    .calendar-emoji{font-size:18px;line-height:1}
+    .calendar-mini{font-size:10px;font-weight:900;color:#78716c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%;min-width:0}
+    .calendar-cell.active .calendar-mini{color:#d6d3d1}
+    .calendar-check{margin-top:auto;font-size:10px;font-weight:1000;color:#65a30d;max-width:100%;min-width:0;overflow:hidden;text-overflow:ellipsis}
+    .calendar-cell.active .calendar-check{color:#bef264}
+    .history-selected{margin-top:14px;background:#fff;border-radius:24px;box-shadow:var(--soft-shadow);overflow:hidden}
+    .history-selected-head{display:grid;grid-template-columns:auto 1fr;gap:12px;padding:16px;border-bottom:1px solid #f5f5f4}
+    .history-status{width:42px;height:42px;border-radius:16px;background:#f5f5f4;color:#a8a29e;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:1000;flex:0 0 42px}
+    .history-status.done{background:#bef264;color:#365314}
+    .history-main{min-width:0;flex:1}
+    .history-title{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:3px}
+    .history-date{font-weight:1000;margin:0}
+    .history-sub{margin:0;color:#78716c;font-size:13px;font-weight:750}
+    .history-stats{grid-column:1/-1;display:flex;gap:7px;flex-wrap:wrap}
+    .history-stat{border-radius:999px;background:#fff8d6;color:#713f12;padding:6px 9px;font-size:11px;font-weight:1000}
+    .history-detail{padding:0 16px 16px}
+    .history-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    .history-box{background:#fafaf9;border-radius:18px;padding:12px}
+    .history-box h4{margin:0 0 8px;color:#a8a29e;font-size:11px;font-weight:1000;letter-spacing:.14em;text-transform:uppercase}
+    .history-box p{margin:0;color:#57534e;font-size:14px;line-height:1.6;font-weight:650;white-space:pre-wrap}
+    .history-done-list{margin:0;padding-left:18px;color:#57534e;font-size:14px;line-height:1.7;font-weight:650}
+    .history-edit{border:0;border-radius:999px;background:#292524;color:#fff;padding:10px 14px;font-size:13px;font-weight:1000;margin-top:12px}
     .goals{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:18px}
     .goal{background:rgba(255,255,255,.82);border-radius:28px;padding:20px;box-shadow:var(--soft-shadow)}
     .goal-head{display:flex;align-items:center;gap:12px;margin-bottom:10px}
     .goal-icon{width:48px;height:48px;background:var(--yellow);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:26px}
     .goal h3{font-size:18px;margin:0;font-weight:1000}
     .goal p{margin:0;color:#57534e;font-size:14px;line-height:1.7;font-weight:650}
+    .danger-zone{grid-column:1/-1;background:#fff;border:1px solid #fecaca;border-radius:28px;padding:20px;box-shadow:var(--soft-shadow)}
+    .danger-zone h3{margin:0 0 6px;font-size:18px;font-weight:1000;color:#991b1b}
+    .danger-zone p{margin:0;color:#78716c;font-size:14px;line-height:1.7;font-weight:650}
+    .danger-button{margin-top:14px;border:0;border-radius:999px;background:#dc2626;color:#fff;padding:12px 16px;font-size:14px;font-weight:1000}
     .amber{background:#fef3c7;color:#78350f;border-color:#fde68a}
     .orange{background:#ffedd5;color:#7c2d12;border-color:#fed7aa}
     .lime{background:#ecfccb;color:#365314;border-color:#d9f99d}
@@ -143,59 +258,152 @@
       h1{font-size:46px}
     }
     @media (max-width: 620px){
-      body{padding-bottom:82px}
-      main{padding:16px 12px 24px}
-      .card{padding:20px;border-radius:24px}
+      html{background:#fff8d6}
+      body{padding-bottom:calc(86px + env(safe-area-inset-bottom));background:#fff8d6}
+      main{width:100%;padding:12px 10px 18px}
+      .card{width:100%;min-width:0;padding:16px;border-radius:20px;box-shadow:0 10px 26px rgba(120,113,108,.12);overflow:hidden}
       .blob{display:none}
       .hero{display:block;margin-bottom:0}
-      .hero,.layout,.weight-section,.goals{margin-top:0}
+      .hero .card + .card{margin-top:10px}
+      .hero,.layout,.weight-section,.history-section,.goals{margin-top:0}
       .layout{display:block}
       body[data-mobile-page="today"] .layout,
       body[data-mobile-page="today"] .weight-section,
+      body[data-mobile-page="today"] .history-section,
       body[data-mobile-page="today"] .goals,
       body[data-mobile-page="plan"] .hero,
       body[data-mobile-page="plan"] .checkin-card,
       body[data-mobile-page="plan"] .weight-section,
+      body[data-mobile-page="plan"] .history-section,
       body[data-mobile-page="plan"] .goals,
       body[data-mobile-page="checkin"] .hero,
       body[data-mobile-page="checkin"] .plan-card,
       body[data-mobile-page="checkin"] .weight-section,
+      body[data-mobile-page="checkin"] .history-section,
       body[data-mobile-page="checkin"] .goals,
       body[data-mobile-page="weight"] .hero,
       body[data-mobile-page="weight"] .layout,
+      body[data-mobile-page="weight"] .history-section,
       body[data-mobile-page="weight"] .goals,
+      body[data-mobile-page="history"] .hero,
+      body[data-mobile-page="history"] .layout,
+      body[data-mobile-page="history"] .weight-section,
+      body[data-mobile-page="history"] .goals,
       body[data-mobile-page="goals"] .hero,
       body[data-mobile-page="goals"] .layout,
+      body[data-mobile-page="goals"] .history-section,
       body[data-mobile-page="goals"] .weight-section{display:none}
       .inputs,.two{grid-template-columns:1fr}
       .meal-group{grid-template-columns:1fr}
       .metrics{grid-template-columns:repeat(2,1fr)}
-      .metric-value{font-size:22px}
-      h1{font-size:40px}
-      .lead{font-size:15px}
-      .section-title{align-items:flex-start}
-      .record-actions{justify-content:flex-start}
+      .status-grid{grid-template-columns:1fr;gap:8px;margin-top:12px}
+      .status-card{border-radius:18px;padding:12px}
+      .status-main{font-size:21px}
+      .status-sub{font-size:13px}
+      .metric{border-radius:18px;padding:12px}
+      .metric-label{font-size:10px;letter-spacing:.04em;margin-bottom:4px}
+      .metric-value{font-size:21px}
+      .metric-sub{font-size:10px}
+      .metrics .metric:last-child{grid-column:1/-1}
+      h1{font-size:34px;letter-spacing:-.035em}
+      .lead{display:none}
+      .section-title{align-items:flex-start;margin-bottom:12px}
+      .section-title h2{font-size:22px}
+      .section-title p{font-size:11px;letter-spacing:.16em}
+      .record-actions{width:100%;display:grid;grid-template-columns:1fr 1fr;gap:8px;justify-content:stretch}
+      .save-button,.done-button{width:100%;padding:13px 10px;min-height:46px}
       .save-status{text-align:left}
-      .weight-table-wrap{max-height:420px}
+      .record-actions .save-status{grid-column:1/-1}
+      .checkin-card{overflow:hidden}
+      .checkin-card .section-title{display:block}
+      .checkin-card .section-title > div:first-child{min-width:0;margin-bottom:10px}
+      .checkin-card .section-title h2{font-size:20px;line-height:1.25;overflow-wrap:anywhere}
+      .checkin-groups{gap:10px}
+      .checkin-group{border-radius:20px}
+      .checkin-group summary{padding:13px 14px}
+      .checkin-group summary::after{font-size:10px;padding:5px 8px}
+      .group-title h3{font-size:17px}
+      .group-title p{font-size:10px;letter-spacing:.12em}
+      .group-body{padding:0 12px 12px}
+      .checkin-card .inputs,
+      .checkin-card .meal-group,
+      .checkin-card .two{width:100%;min-width:0}
+      .checkin-card .input-card,
+      .checkin-card .mood,
+      .checkin-card .tip,
+      .checkin-card .memo,
+      .checkin-card .meal-total{width:100%;min-width:0}
+      .checkin-card .input-wrap{width:100%;min-width:0;overflow:hidden}
+      .checkin-card .input-wrap input{width:100%;min-width:0}
+      .checkin-card textarea,
+      .checkin-card select{width:100%;min-width:0;max-width:100%}
+      .checkin-card .small-label,
+      .checkin-card .input-card label{line-height:1.25;overflow-wrap:anywhere}
+      .checkin-card .tip p,
+      .checkin-card .meal-total{overflow-wrap:anywhere}
+      .weight-chart{min-height:220px;padding:10px}
+      .weight-chart svg{min-height:200px}
+      .weight-quick{grid-template-columns:1fr;gap:8px;border-radius:20px;padding:12px}
+      .weight-calendar-wrap,.weight-detail{border-radius:20px;padding:12px}
+      .weight-detail-head{display:block}
+      .weight-detail-grid{grid-template-columns:1fr;gap:8px}
       .day-inner{gap:9px}
+      .week-days{gap:3px;margin-bottom:8px}
+      .week-day{font-size:9px;line-height:1.25;padding:6px 1px}
+      .day-btn{border-radius:20px;padding:12px}
+      .check{width:38px;height:38px;border-radius:14px}
       .mini-emoji{padding:7px 9px}
       .chips{gap:8px;margin-bottom:14px}
-      .chip{padding:9px 12px}
-      .progress-box{margin-top:16px}
+      .chip{padding:8px 10px;font-size:10px;letter-spacing:.08em}
+      .progress-box{margin-top:14px;border-radius:20px;padding:13px}
+      .progress-label{align-items:flex-start;flex-direction:column;font-size:13px}
+      .progress-track{height:13px}
       .today-head{margin-bottom:14px}
+      .icon-box{width:48px;height:48px;border-radius:16px;font-size:24px}
+      .today-date{font-size:22px}
+      .plan-pill{border-radius:20px;padding:13px;margin-bottom:12px}
+      .plan-emoji{font-size:30px}
+      .plan-title{font-size:18px;line-height:1.3}
+      .today-note{font-size:13px;line-height:1.6;margin:0 0 12px}
       .items{gap:7px}
-      .item{padding:9px 11px}
+      .item{padding:11px;border-radius:16px;min-height:46px}
+      .item-check{width:24px;height:24px;flex-basis:24px}
+      .custom-workouts{margin-top:12px;padding-top:12px}
+      .custom-workout-form{grid-template-columns:1fr;gap:7px}
+      .custom-workout-form button{min-height:44px}
+      .workout-item,.custom-item{display:grid;grid-template-columns:1fr;gap:0;padding:0}
+      .workout-toggle,.custom-toggle{padding:11px}
+      .load-wrap{padding:0 11px 11px 47px;justify-content:flex-start}
+      .load-input{width:76px}
+      .custom-delete{position:absolute;right:6px;top:6px;min-height:34px;align-self:auto}
+      .mobile-quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+      .quick-button{border:0;border-radius:16px;min-height:46px;padding:12px;background:#fff;color:#292524;font-size:13px;font-weight:1000}
+      .quick-button.primary{background:#bef264;color:#365314}
+      .input-card,.mood,.tip,.memo{border-radius:18px;padding:12px}
+      .tip,.memo{margin-top:8px}
+      .input-card label,.small-label{font-size:10px;letter-spacing:.12em}
+      .input-wrap{min-height:48px;border-radius:16px;padding:10px 12px}
+      .input-wrap input{font-size:17px;min-width:0}
+      select{min-height:48px}
+      textarea{min-height:96px;border-radius:16px}
+      .meal-total{border-radius:16px;padding:11px 12px}
+      .meal-total span:last-child{font-size:18px}
+      .tip p{border-radius:16px;padding:12px;font-size:13px}
+      .goal{border-radius:20px;padding:16px}
+      .goal-icon{width:42px;height:42px;border-radius:15px}
+      .danger-zone{border-radius:20px;padding:16px}
+      .danger-button{width:100%;min-height:46px}
       .mobile-tabs{
         position:fixed;
-        left:10px;
-        right:10px;
-        bottom:10px;
+        left:8px;
+        right:8px;
+        bottom:calc(8px + env(safe-area-inset-bottom));
         z-index:10;
         display:grid;
-        grid-template-columns:repeat(5,1fr);
-        gap:4px;
-        padding:7px;
-        border-radius:24px;
+        grid-template-columns:repeat(6,minmax(0,1fr));
+        gap:3px;
+        padding:6px;
+        border-radius:22px;
         background:rgba(255,255,255,.92);
         box-shadow:0 16px 45px rgba(41,37,36,.18);
         backdrop-filter:blur(16px);
@@ -211,12 +419,45 @@
         align-items:center;
         justify-content:center;
         gap:3px;
-        padding:8px 2px;
-        font-size:11px;
+        padding:7px 1px;
+        font-size:10px;
         font-weight:1000;
+        min-height:50px;
       }
-      .tab-btn span:first-child{font-size:18px;line-height:1}
+      .tab-btn span:first-child{font-size:17px;line-height:1}
       .tab-btn.active{background:#292524;color:#fff}
+      .history-toolbar{margin-bottom:10px}
+      .history-month-title{font-size:16px}
+      .calendar-month{border-radius:20px;padding:10px}
+      .calendar-weekdays,.calendar-grid{gap:3px}
+      .calendar-weekdays{font-size:10px}
+      .calendar-cell,.calendar-empty,.calendar-off{min-height:58px;border-radius:12px}
+      .calendar-cell{padding:6px 4px;gap:3px}
+      .calendar-date{font-size:13px}
+      .calendar-emoji{font-size:14px}
+      .calendar-mini{font-size:8.5px;line-height:1.15}
+      .calendar-check{font-size:8.5px;line-height:1.15}
+      .weight-calendar .calendar-check{white-space:normal}
+      .weight-calendar .calendar-mini{white-space:normal}
+      .history-selected{border-radius:20px;margin-top:10px}
+      .history-selected-head{padding:12px}
+      .history-stats{width:100%;justify-content:flex-start}
+      .history-grid{grid-template-columns:1fr}
+      .history-detail{padding:0 12px 12px}
+      .history-box{border-radius:16px}
+    }
+    @media (max-width: 360px){
+      main{padding-left:8px;padding-right:8px}
+      .card{padding:14px}
+      h1{font-size:30px}
+      .tab-btn{font-size:9px}
+      .tab-btn span:first-child{font-size:16px}
+      .history-status,.check{width:34px;height:34px;border-radius:12px}
+      .calendar-cell,.calendar-empty,.calendar-off{min-height:56px}
+      .calendar-cell{padding:5px 3px}
+      .checkin-card .record-actions{grid-template-columns:1fr}
+      .checkin-card .record-actions .save-status{grid-column:auto}
+      .save-button,.done-button{font-size:13px}
     }
   </style>
 </head>
@@ -229,13 +470,39 @@
     <section class="hero">
       <div class="card">
         <div class="chips">
-          <span class="chip chip-main">BONNIE 5/13 START</span>
-          <span class="chip chip-light">32 歲｜158cm｜65kg｜體脂 35%</span>
-          <button id="resetBtn" class="chip chip-reset">清空紀錄</button>
+          <span class="chip chip-main">BONNIE 28 天減脂計畫</span>
+          <span class="chip chip-light" id="planStartChip">開始：2026/5/14</span>
         </div>
 
-        <h1>減脂打卡基地<br></h1>
-        <p class="lead">目標：8 月前降到 60kg 以下、體脂 30% 以下。這 4 週先把節奏養起來：重訓 3 天、羽球 1-2 天、Zone 2 有氧 1-2 天，蛋白質每天 100-120g。</p>
+        <h1>Bonnie 減脂追蹤<br></h1>
+        <p class="lead">從計畫開始日記錄起始狀態，再用每天填寫的體重、體脂更新目前狀態。這樣月底回頭看時，可以清楚比較 before / after。</p>
+
+        <div class="status-grid">
+          <div class="status-card">
+            <details>
+              <summary>
+                <span>
+                  <span class="status-label">Start｜起始狀態</span>
+                  <span class="status-note" id="startStateNote">2026/5/14 計畫開始</span>
+                </span>
+              </summary>
+              <div class="start-status-body">
+                <div class="status-values">
+                  <span class="status-main" id="startWeightText">65.0kg</span>
+                  <span class="status-main" id="startBodyFatText">35.0%</span>
+                </div>
+              </div>
+            </details>
+          </div>
+          <div class="status-card">
+            <p class="status-label">Current｜最新紀錄</p>
+            <div class="status-values">
+              <span class="status-main" id="currentWeightText">65.0kg</span>
+              <span class="status-main" id="currentBodyFatText">35.0%</span>
+            </div>
+            <p class="status-note" id="currentStateNote">尚未填寫時先顯示起始狀態</p>
+          </div>
+        </div>
 
         <div class="metrics">
           <div class="metric"><div class="metric-label">🏆 完成率</div><div class="metric-value" id="progressPercent">0%</div></div>
@@ -247,7 +514,7 @@
 
         <div class="progress-box">
           <div class="progress-label">
-            <span>體重目標進度：65kg → 60kg</span>
+            <span id="weightGoalLabel">體重目標進度：65kg → 60kg</span>
             <span id="weightLost">0.0 / 5.0 kg</span>
           </div>
           <div class="progress-track"><div class="progress-fill" id="weightBar"></div></div>
@@ -259,7 +526,7 @@
           <div class="icon-box">💛</div>
           <div>
             <p class="eyebrow">Today Focus</p>
-            <h2 class="today-date" id="todayDate">5/13（三）</h2>
+            <h2 class="today-date" id="todayDate">5/14（四）</h2>
           </div>
         </div>
 
@@ -274,6 +541,21 @@
         </div>
         <p class="today-note" id="todayNote">簽約後先輕量熟悉器材，不要練到爆痠。</p>
         <div class="items" id="todayItems"></div>
+        <div class="custom-workouts">
+          <div class="custom-head">
+            <p>自由運動</p>
+          </div>
+          <form class="custom-workout-form" id="customWorkoutForm">
+            <input id="customWorkoutInput" autocomplete="off" placeholder="新增這天想做的項目">
+            <button type="submit">新增</button>
+          </form>
+          <div class="items" id="customWorkoutItems"></div>
+          <p class="custom-empty" id="customWorkoutEmpty">可以自由加今天真正想做的運動。</p>
+        </div>
+        <div class="mobile-quick-actions">
+          <button class="quick-button primary" data-mobile-jump="checkin">填今天紀錄</button>
+          <button class="quick-button" data-mobile-jump="history">看歷史</button>
+        </div>
       </div>
     </section>
 
@@ -296,7 +578,7 @@
         <div class="section-title">
           <div>
             <p>Daily Check-in</p>
-            <h2 id="recordTitle">5/13（三） 紀錄</h2>
+            <h2 id="recordTitle">5/14（四） 紀錄</h2>
           </div>
           <div class="record-actions">
             <button id="saveBtn" class="save-button">儲存紀錄</button>
@@ -305,67 +587,115 @@
           </div>
         </div>
 
-        <div class="inputs">
-          <div class="meal-group">
-            <div class="input-card">
-              <label>🌞 早餐</label>
-              <div class="input-wrap"><input id="breakfastCalories" inputmode="decimal" placeholder="例：350"><span class="suffix">kcal</span></div>
+        <div class="checkin-groups">
+          <details class="checkin-group" open>
+            <summary>
+              <div class="group-title">
+                <p>Food</p>
+                <h3>飲食紀錄</h3>
+              </div>
+            </summary>
+            <div class="group-body">
+              <div class="meal-group">
+                <div class="input-card">
+                  <label>🌞 早餐</label>
+                  <div class="input-wrap"><input id="breakfastCalories" inputmode="decimal" placeholder="例：350"><span class="suffix">kcal</span></div>
+                </div>
+                <div class="input-card">
+                  <label>🍱 午餐</label>
+                  <div class="input-wrap"><input id="lunchCalories" inputmode="decimal" placeholder="例：550"><span class="suffix">kcal</span></div>
+                </div>
+                <div class="input-card">
+                  <label>🌙 晚餐</label>
+                  <div class="input-wrap"><input id="dinnerCalories" inputmode="decimal" placeholder="例：500"><span class="suffix">kcal</span></div>
+                </div>
+                <div class="input-card">
+                  <label>🥤 零食飲料</label>
+                  <div class="input-wrap"><input id="snackCalories" inputmode="decimal" placeholder="例：150"><span class="suffix">kcal</span></div>
+                </div>
+                <div class="meal-total">
+                  <span>今日熱量合計</span>
+                  <span><strong id="dailyCaloriesTotal">--</strong> kcal</span>
+                </div>
+              </div>
             </div>
-            <div class="input-card">
-              <label>🍱 午餐</label>
-              <div class="input-wrap"><input id="lunchCalories" inputmode="decimal" placeholder="例：550"><span class="suffix">kcal</span></div>
-            </div>
-            <div class="input-card">
-              <label>🌙 晚餐</label>
-              <div class="input-wrap"><input id="dinnerCalories" inputmode="decimal" placeholder="例：500"><span class="suffix">kcal</span></div>
-            </div>
-            <div class="input-card">
-              <label>🥤 零食飲料</label>
-              <div class="input-wrap"><input id="snackCalories" inputmode="decimal" placeholder="例：150"><span class="suffix">kcal</span></div>
-            </div>
-            <div class="meal-total">
-              <span>今日熱量合計</span>
-              <span><strong id="dailyCaloriesTotal">--</strong> kcal</span>
-            </div>
-          </div>
-          <div class="input-card">
-            <label>🥚 蛋白質</label>
-            <div class="input-wrap"><input id="protein" inputmode="decimal" placeholder="例：105"><span class="suffix">g</span></div>
-          </div>
-          <div class="input-card">
-            <label>🔥 手錶運動消耗</label>
-            <div class="input-wrap"><input id="burn" inputmode="decimal" placeholder="例：420"><span class="suffix">kcal</span></div>
-          </div>
-          <div class="input-card">
-            <label>📉 體脂率</label>
-            <div class="input-wrap"><input id="bodyFat" inputmode="decimal" placeholder="例：34.8"><span class="suffix">%</span></div>
-          </div>
-          <div class="input-card">
-            <label>💧 喝水量</label>
-            <div class="input-wrap"><input id="water" inputmode="decimal" placeholder="例：1800"><span class="suffix">ml</span></div>
-          </div>
-        </div>
+          </details>
 
-        <div class="two">
-          <div class="mood">
-            <label class="small-label">今天狀態</label>
-            <select id="mood">
-              <option value="">選一下</option>
-              <option>很有力！</option>
-              <option>普通，但有做就贏</option>
-              <option>有點累，降低強度</option>
-              <option>想躺平，但還是記錄</option>
-            </select>
-          </div>
-          <div class="tip">
-            <label class="small-label" style="color:#4d7c0f">今日小提醒</label>
-            <p>熱量不用完美，蛋白質先顧好。運動消耗不要全部吃回去，運動日多 100-200 kcal 就好。</p>
-          </div>
-        </div>
+          <details class="checkin-group">
+            <summary>
+              <div class="group-title">
+                <p>Body</p>
+                <h3>身體數據</h3>
+              </div>
+            </summary>
+            <div class="group-body">
+              <div class="inputs">
+                <div class="input-card">
+                  <label>🥚 蛋白質</label>
+                  <div class="input-wrap"><input id="protein" inputmode="decimal" placeholder="例：105"><span class="suffix">g</span></div>
+                </div>
+                <div class="input-card">
+                  <label>📉 體脂率</label>
+                  <div class="input-wrap"><input id="bodyFat" inputmode="decimal" placeholder="例：34.8"><span class="suffix">%</span></div>
+                </div>
+                <div class="input-card">
+                  <label>💧 喝水量</label>
+                  <div class="input-wrap"><input id="water" inputmode="decimal" placeholder="例：1800"><span class="suffix">ml</span></div>
+                </div>
+              </div>
+            </div>
+          </details>
 
-        <div class="memo">
-          <label class="small-label">備註</label>
-          <textarea id="memo" placeholder="例：今天羽球打超累、晚餐吃自助餐、睡眠不足..."></textarea>
+          <details class="checkin-group">
+            <summary>
+              <div class="group-title">
+                <p>Activity</p>
+                <h3>活動與狀態</h3>
+              </div>
+            </summary>
+            <div class="group-body">
+              <div class="two">
+                <div class="input-card">
+                  <label>🔥 手錶運動消耗</label>
+                  <div class="input-wrap"><input id="burn" inputmode="decimal" placeholder="例：420"><span class="suffix">kcal</span></div>
+                </div>
+                <div class="mood">
+                  <label class="small-label">今天狀態</label>
+                  <select id="mood">
+                    <option value="">選一下</option>
+                    <option>很有力！</option>
+                    <option>普通，但有做就贏</option>
+                    <option>有點累，降低強度</option>
+                    <option>想躺平，但還是記錄</option>
+                  </select>
+                </div>
+              </div>
+              <div class="tip">
+                <label class="small-label" style="color:#4d7c0f">今日小提醒</label>
+                <p>熱量不用完美，蛋白質先顧好。運動消耗不要全部吃回去，運動日多 100-200 kcal 就好。</p>
+              </div>
+            </div>
+          </details>
+
+          <details class="checkin-group">
+            <summary>
+              <div class="group-title">
+                <p>Notes</p>
+                <h3>運動與備註</h3>
+              </div>
+            </summary>
+            <div class="group-body">
+              <div class="memo">
+                <label class="small-label">實際做了什麼</label>
+                <textarea id="actualWorkout" placeholder="例：腿推 30kg 4 組、划船 20kg 3 組、最後快走 15 分鐘..."></textarea>
+              </div>
+
+              <div class="memo">
+                <label class="small-label">備註</label>
+                <textarea id="memo" placeholder="例：今天羽球打超累、晚餐吃自助餐、睡眠不足..."></textarea>
+              </div>
+            </div>
+          </details>
         </div>
       </div>
     </section>
@@ -379,20 +709,46 @@
       </div>
       <div class="weight-panel">
         <div class="weight-chart" id="weightChart"></div>
-        <div class="weight-table-wrap">
-          <table class="weight-table">
-            <thead>
-              <tr>
-                <th>日期</th>
-                <th>目標</th>
-                <th>早晨體重</th>
-                <th>變化</th>
-              </tr>
-            </thead>
-            <tbody id="weightTableBody"></tbody>
-          </table>
+        <div class="weight-quick">
+          <div class="input-card">
+            <label>今日體重</label>
+            <div class="input-wrap"><input id="todayWeightInput" data-weight-field="weight" data-weight-scope="today" inputmode="decimal" placeholder="例：64.6"><span class="suffix">kg</span></div>
+          </div>
+          <div class="input-card">
+            <label>今日體脂</label>
+            <div class="input-wrap"><input id="todayBodyFatInput" data-weight-field="bodyFat" data-weight-scope="today" inputmode="decimal" placeholder="例：34.8"><span class="suffix">%</span></div>
+          </div>
+          <div class="weight-quick-summary">
+            <span>今日變化</span>
+            <span id="todayWeightDelta">--</span>
+          </div>
+        </div>
+        <div class="weight-calendar-wrap">
+          <div class="history-toolbar">
+            <button class="navbtn" id="prevWeightMonth">‹</button>
+            <h3 class="history-month-title" id="weightMonthTitle">2026 年 5 月</h3>
+            <button class="navbtn" id="nextWeightMonth">›</button>
+          </div>
+          <div class="weight-calendar" id="weightCalendar"></div>
+        </div>
+        <div id="weightDetail"></div>
+      </div>
+    </section>
+
+    <section class="card history-section">
+      <div class="section-title">
+        <div>
+          <p>History</p>
+          <h2>打卡歷史</h2>
         </div>
       </div>
+      <div class="history-toolbar">
+        <button class="navbtn" id="prevHistoryMonth">‹</button>
+        <h3 class="history-month-title" id="historyMonthTitle">2026 年 5 月</h3>
+        <button class="navbtn" id="nextHistoryMonth">›</button>
+      </div>
+      <div class="history-calendar" id="historyCalendar"></div>
+      <div id="historyDetail"></div>
     </section>
 
     <section class="goals">
@@ -406,7 +762,12 @@
       </div>
       <div class="goal">
         <div class="goal-head"><div class="goal-icon">🏆</div><h3>月底目標</h3></div>
-        <p>5/13 到 6/9 先目標 63-63.5kg，體脂往 33.5-34% 靠近。先穩，不要急。</p>
+        <p>5/14 到 6/10 先目標 63-63.5kg，體脂往 33.5-34% 靠近。先穩，不要急。</p>
+      </div>
+      <div class="danger-zone">
+        <h3>資料管理</h3>
+        <p>這是危險操作。清空後會刪除 28 天內所有飲食、運動、體重、checklist、歷史與備註紀錄。</p>
+        <button id="resetBtn" class="danger-button">清空全部紀錄</button>
       </div>
     </section>
   </main>
@@ -416,12 +777,17 @@
     <button class="tab-btn" data-page="plan"><span>📅</span><span>計畫</span></button>
     <button class="tab-btn" data-page="checkin"><span>✅</span><span>紀錄</span></button>
     <button class="tab-btn" data-page="weight"><span>📉</span><span>體重</span></button>
+    <button class="tab-btn" data-page="history"><span>🧾</span><span>歷史</span></button>
     <button class="tab-btn" data-page="goals"><span>🏆</span><span>目標</span></button>
   </nav>
 
   <script>
-    const STORAGE_KEY = "bonnie_fitness_tracker_2026_0513_html";
-    const startDate = new Date("2026-05-13T00:00:00+08:00");
+    const STORAGE_KEY = "bonnie_fitness_tracker_2026_0514_html";
+    const PAGE_STORAGE_KEY = `${STORAGE_KEY}_mobile_page`;
+    const mobilePages = ["today", "plan", "checkin", "weight", "history", "goals"];
+    const startDate = new Date("2026-05-14T00:00:00+08:00");
+    const initialBodyState = { weight: 65, bodyFat: 35 };
+    const targetBodyState = { weight: 60, bodyFat: 30 };
 
     const planNotes = {
       strengthA: { title: "重訓 A｜下半身＋背", tag: "力量日", emoji: "🏋️‍♀️", items: ["腿推機 4x10-12", "啞鈴羅馬尼亞硬舉 3x10", "坐姿划船 3x12", "滑輪下拉 3x10-12", "臀推/臀橋 3x12", "棒式 3x30秒"], className: "amber" },
@@ -464,16 +830,20 @@
     ];
 
     const initialLog = dayPlans.map((p, i) => ({
-      id: i, done: false, breakfastCalories: "", lunchCalories: "", dinnerCalories: "", snackCalories: "", calories: "", protein: "", burn: "", weight: "", bodyFat: "", water: "", mood: "", memo: "", ...p
+      id: i, done: false, breakfastCalories: "", lunchCalories: "", dinnerCalories: "", snackCalories: "", calories: "", protein: "", burn: "", weight: i === 0 ? String(initialBodyState.weight) : "", bodyFat: i === 0 ? String(initialBodyState.bodyFat) : "", water: "", mood: "", actualWorkout: "", memo: "", workoutChecks: [], exerciseLoads: [], customWorkouts: [], ...p
     }));
 
     const calorieFields = ["breakfastCalories","lunchCalories","dinnerCalories","snackCalories"];
-    const fields = [...calorieFields,"protein","burn","bodyFat","water","mood","memo"];
+    const fields = [...calorieFields,"protein","burn","bodyFat","water","mood","actualWorkout","memo"];
 
     let logs = loadLogs();
-    let selected = 0;
-    let viewWeek = 1;
-    let mobilePage = "today";
+    let selected = getTodayOffset();
+    let weightSelected = null;
+    let weightMonth = new Date(getDateForOffset(selected).getFullYear(), getDateForOffset(selected).getMonth(), 1);
+    let historySelected = null;
+    let historyMonth = new Date(getDateForOffset(selected).getFullYear(), getDateForOffset(selected).getMonth(), 1);
+    let viewWeek = getWeek(selected);
+    let mobilePage = loadMobilePage();
 
     function loadLogs(){
       try{
@@ -486,6 +856,20 @@
           if(merged.calories && !calorieFields.some(field => merged[field])){
             merged.breakfastCalories = merged.calories;
           }
+          if(i === 0){
+            if(!merged.weight) merged.weight = String(initialBodyState.weight);
+            if(!merged.bodyFat) merged.bodyFat = String(initialBodyState.bodyFat);
+          }
+          const itemCount = planNotes[merged.type]?.items.length || 0;
+          merged.workoutChecks = Array.from({ length: itemCount }, (_, index) => Boolean(merged.workoutChecks?.[index]));
+          merged.exerciseLoads = Array.from({ length: itemCount }, (_, index) => String(merged.exerciseLoads?.[index] || ""));
+          merged.customWorkouts = Array.isArray(merged.customWorkouts)
+            ? merged.customWorkouts.map(item => ({
+              text: typeof item === "string" ? item : String(item?.text || ""),
+              done: Boolean(typeof item === "string" ? false : item?.done),
+              load: typeof item === "string" ? "" : String(item?.load || "")
+            })).filter(item => item.text.trim())
+            : [];
           return merged;
         });
       }catch(e){
@@ -495,6 +879,15 @@
 
     function saveLogs(){
       localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
+    }
+
+    function loadMobilePage(){
+      const savedPage = localStorage.getItem(PAGE_STORAGE_KEY);
+      return mobilePages.includes(savedPage) ? savedPage : "today";
+    }
+
+    function saveMobilePage(page){
+      localStorage.setItem(PAGE_STORAGE_KEY, page);
     }
 
     function updateSaveStatus(text){
@@ -512,7 +905,72 @@
       return `${d.getMonth()+1}/${d.getDate()}（${weekdays[d.getDay()]}）`;
     }
 
-    function getWeek(offset){ return Math.floor(offset / 7) + 1; }
+    function formatMonthDay(date){
+      return `${date.getMonth()+1}/${date.getDate()}`;
+    }
+
+    function getDateForOffset(offset){
+      const d = new Date(startDate);
+      d.setDate(d.getDate() + offset);
+      return d;
+    }
+
+    function formatMonthTitle(date){
+      return `${date.getFullYear()} 年 ${date.getMonth() + 1} 月`;
+    }
+
+    function sameMonth(a, b){
+      return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth();
+    }
+
+    function getPlanMonthBounds(){
+      const first = getDateForOffset(0);
+      const last = getDateForOffset(logs.length - 1);
+      return {
+        first: new Date(first.getFullYear(), first.getMonth(), 1),
+        last: new Date(last.getFullYear(), last.getMonth(), 1)
+      };
+    }
+
+    function getMonday(date){
+      const d = new Date(date);
+      d.setHours(0, 0, 0, 0);
+      const day = d.getDay();
+      d.setDate(d.getDate() - ((day + 6) % 7));
+      return d;
+    }
+
+    function getPlanWeekStart(week){
+      const d = getMonday(startDate);
+      d.setDate(d.getDate() + ((week - 1) * 7));
+      return d;
+    }
+
+    function getWeek(offset){
+      const monday = getMonday(getDateForOffset(offset));
+      const firstMonday = getMonday(startDate);
+      return Math.floor((monday - firstMonday) / 86400000 / 7) + 1;
+    }
+
+    function getMaxWeek(){
+      return getWeek(logs.length - 1);
+    }
+
+    function getWeekTitle(week){
+      const start = getPlanWeekStart(week);
+      const end = new Date(start);
+      end.setDate(end.getDate() + 6);
+      return `第 ${week} 週｜${formatMonthDay(start)}-${formatMonthDay(end)}`;
+    }
+
+    function getTodayOffset(){
+      const now = new Date();
+      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+      const start = new Date(startDate);
+      const startDay = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+      const diff = Math.floor((today - startDay) / 86400000);
+      return Math.min(Math.max(diff, 0), dayPlans.length - 1);
+    }
 
     function avg(nums){
       const arr = nums.map(Number).filter(Boolean);
@@ -526,20 +984,66 @@
     }
 
     function getTargetWeight(id){
-      return 65 - (5 * (id / (logs.length - 1)));
+      const startWeight = getStartBodyState().weight;
+      const totalLoss = startWeight - targetBodyState.weight;
+      return startWeight - (totalLoss * (id / (logs.length - 1)));
+    }
+
+    function getStartBodyState(){
+      const firstLog = logs[0] || {};
+      return {
+        weight: Number(firstLog.weight) || initialBodyState.weight,
+        bodyFat: Number(firstLog.bodyFat) || initialBodyState.bodyFat,
+        date: getDateForOffset(0)
+      };
+    }
+
+    function getLatestBodyState(){
+      const startState = getStartBodyState();
+      const latestWeightLog = [...logs].reverse().find(log => Number(log.weight));
+      const latestBodyFatLog = [...logs].reverse().find(log => Number(log.bodyFat));
+      const latestId = Math.max(
+        latestWeightLog?.id ?? 0,
+        latestBodyFatLog?.id ?? 0
+      );
+      return {
+        weight: Number(latestWeightLog?.weight) || startState.weight,
+        bodyFat: Number(latestBodyFatLog?.bodyFat) || startState.bodyFat,
+        date: latestWeightLog || latestBodyFatLog ? getDateForOffset(latestId) : null
+      };
+    }
+
+    function formatNumber(value, digits = 1){
+      return Number(value).toFixed(digits);
     }
 
     function getWeightStats(){
-      const weights = logs.map(l => Number(l.weight)).filter(Boolean);
-      const latestWeight = weights.length ? weights[weights.length - 1] : 65;
-      const lost = Math.max(0, 65 - latestWeight);
-      const weightProgress = Math.min(100, Math.max(0, Math.round((lost / 5) * 100)));
+      const startState = getStartBodyState();
+      const latestState = getLatestBodyState();
+      const targetLoss = startState.weight - targetBodyState.weight;
+      const latestWeight = latestState.weight;
+      const lost = Math.max(0, startState.weight - latestWeight);
+      const weightProgress = targetLoss > 0 ? Math.min(100, Math.max(0, Math.round((lost / targetLoss) * 100))) : 0;
       return { latestWeight, lost, weightProgress };
     }
 
     function renderWeightProgress(){
       const { lost, weightProgress } = getWeightStats();
-      document.getElementById("weightLost").textContent = `${lost.toFixed(1)} / 5.0 kg`;
+      const startState = getStartBodyState();
+      const latestState = getLatestBodyState();
+      const weightDelta = latestState.weight - startState.weight;
+      const bodyFatDelta = latestState.bodyFat - startState.bodyFat;
+      document.getElementById("planStartChip").textContent = `開始：${startState.date.getFullYear()}/${startState.date.getMonth() + 1}/${startState.date.getDate()}`;
+      document.getElementById("startWeightText").textContent = `${formatNumber(startState.weight)}kg`;
+      document.getElementById("startBodyFatText").textContent = `${formatNumber(startState.bodyFat)}%`;
+      document.getElementById("currentWeightText").textContent = `${formatNumber(latestState.weight)}kg`;
+      document.getElementById("currentBodyFatText").textContent = `${formatNumber(latestState.bodyFat)}%`;
+      document.getElementById("startStateNote").textContent = `${formatDate(0)} 起始記錄`;
+      document.getElementById("currentStateNote").textContent = latestState.date
+        ? `最新：${formatMonthDay(latestState.date)}｜體重 ${weightDelta >= 0 ? "+" : ""}${weightDelta.toFixed(1)}kg，體脂 ${bodyFatDelta >= 0 ? "+" : ""}${bodyFatDelta.toFixed(1)}%`
+        : "尚未填寫時先顯示起始狀態";
+      document.getElementById("weightGoalLabel").textContent = `體重目標進度：${formatNumber(startState.weight)}kg → ${formatNumber(targetBodyState.weight)}kg`;
+      document.getElementById("weightLost").textContent = `${lost.toFixed(1)} / ${(startState.weight - targetBodyState.weight).toFixed(1)} kg`;
       document.getElementById("weightBar").style.width = `${weightProgress}%`;
     }
 
@@ -551,12 +1055,43 @@
       return String(value).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
     }
 
+    function escapeHtml(value){
+      return String(value).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    function getExercisePb(name){
+      const loads = [];
+      logs.forEach(log => {
+        const detail = planNotes[log.type];
+        detail.items.forEach((item, index) => {
+          if(item === name && Number(log.exerciseLoads?.[index])) loads.push(Number(log.exerciseLoads[index]));
+        });
+        (log.customWorkouts || []).forEach(item => {
+          if(item.text === name && Number(item.load)) loads.push(Number(item.load));
+        });
+      });
+      return loads.length ? Math.max(...loads) : 0;
+    }
+
+    function shouldTrackLoad(type){
+      return type.startsWith("strength");
+    }
+
+    function renderPbBadge(name){
+      const pb = getExercisePb(name);
+      return pb ? `<span class="pb-badge">PB ${pb}kg</span>` : "";
+    }
+
     function renderWeightTracker(updateTable = true){
+      const startState = getStartBodyState();
       const actualWeights = logs.map(l => Number(l.weight)).filter(Boolean);
-      const minWeight = Math.floor(Math.min(59, 60, ...actualWeights)) - 0.5;
-      const maxWeight = Math.ceil(Math.max(66, 65, ...actualWeights)) + 0.5;
+      const actualBodyFats = logs.map(l => Number(l.bodyFat)).filter(Boolean);
+      const minWeight = Math.floor(Math.min(59, targetBodyState.weight, ...actualWeights)) - 0.5;
+      const maxWeight = Math.ceil(Math.max(66, startState.weight, ...actualWeights)) + 0.5;
+      const minBodyFat = Math.floor(Math.min(28, targetBodyState.bodyFat, ...actualBodyFats)) - 0.5;
+      const maxBodyFat = Math.ceil(Math.max(36, startState.bodyFat, ...actualBodyFats)) + 0.5;
       const left = 46;
-      const right = 18;
+      const right = 50;
       const top = 18;
       const bottom = 34;
       const width = 680;
@@ -565,67 +1100,183 @@
       const chartHeight = height - top - bottom;
       const xFor = id => left + (id / (logs.length - 1)) * chartWidth;
       const yFor = weight => top + ((maxWeight - weight) / (maxWeight - minWeight)) * chartHeight;
+      const yFatFor = bodyFat => top + ((maxBodyFat - bodyFat) / (maxBodyFat - minBodyFat)) * chartHeight;
       const targetPoints = logs.map(log => ({ x: xFor(log.id), y: yFor(getTargetWeight(log.id)) }));
       const actualPoints = logs
         .map(log => ({ id: log.id, weight: Number(log.weight) || 0 }))
         .filter(point => point.weight)
         .map(point => ({ ...point, x: xFor(point.id), y: yFor(point.weight) }));
+      const bodyFatPoints = logs
+        .map(log => ({ id: log.id, bodyFat: Number(log.bodyFat) || 0 }))
+        .filter(point => point.bodyFat)
+        .map(point => ({ ...point, x: xFor(point.id), y: yFatFor(point.bodyFat) }));
       const yTicks = [Math.floor(maxWeight), Math.round((maxWeight + minWeight) / 2), Math.ceil(minWeight)];
+      const fatTicks = [Math.floor(maxBodyFat), Math.round((maxBodyFat + minBodyFat) / 2), Math.ceil(minBodyFat)];
       const grid = yTicks.map(tick => `
         <line class="chart-grid" x1="${left}" y1="${yFor(tick)}" x2="${width - right}" y2="${yFor(tick)}"></line>
         <text x="8" y="${yFor(tick) + 4}">${tick}kg</text>
       `).join("");
+      const fatAxis = fatTicks.map(tick => `
+        <text x="${width - 36}" y="${yFatFor(tick) + 4}">${tick}%</text>
+      `).join("");
       const actualLine = actualPoints.length > 1 ? `<path class="chart-line" d="${buildPath(actualPoints)}"></path>` : "";
+      const bodyFatLine = bodyFatPoints.length > 1 ? `<path class="chart-fat-line" d="${buildPath(bodyFatPoints)}"></path>` : "";
       const dots = actualPoints.map(point => `<circle class="chart-dot" cx="${point.x}" cy="${point.y}" r="5"></circle>`).join("");
-      const emptyText = actualPoints.length ? "" : `<text x="${width / 2 - 54}" y="${height / 2}">輸入體重後會出現曲線</text>`;
+      const fatDots = bodyFatPoints.map(point => `<circle class="chart-fat-dot" cx="${point.x}" cy="${point.y}" r="5"></circle>`).join("");
+      const emptyText = actualPoints.length || bodyFatPoints.length ? "" : `<text x="${width / 2 - 74}" y="${height / 2}">輸入體重或體脂後會出現曲線</text>`;
 
       document.getElementById("weightChart").innerHTML = `
-        <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="早晨體重趨勢圖">
+        <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="早晨體重與體脂趨勢圖">
           ${grid}
+          ${fatAxis}
           <path class="chart-target" d="${buildPath(targetPoints)}"></path>
           ${actualLine}
+          ${bodyFatLine}
           ${dots}
+          ${fatDots}
           ${emptyText}
+          <g class="chart-legend">
+            <circle cx="${left}" cy="11" r="4" fill="#f59e0b"></circle>
+            <text x="${left + 8}" y="15" fill="#78716c">體重</text>
+            <circle cx="${left + 54}" cy="11" r="4" fill="#16a34a"></circle>
+            <text x="${left + 62}" y="15" fill="#78716c">體脂</text>
+          </g>
           <text x="${left}" y="${height - 8}">${formatDate(0)}</text>
-          <text x="${width - 86}" y="${height - 8}">${formatDate(logs.length - 1)}</text>
+          <text x="${width - right - 68}" y="${height - 8}">${formatDate(logs.length - 1)}</text>
         </svg>
       `;
 
       if(!updateTable) return;
+      renderWeightInputs();
+      renderWeightCalendar();
+      renderWeightDetail();
+    }
 
-      document.getElementById("weightTableBody").innerHTML = logs.map(log => {
-        const weight = Number(log.weight) || 0;
-        const target = getTargetWeight(log.id);
-        const delta = weight ? weight - 65 : 0;
-        const deltaText = weight ? `${delta >= 0 ? "+" : ""}${delta.toFixed(1)} kg` : "--";
-        const deltaClass = weight ? (delta <= 0 ? "good" : "up") : "";
+    function getWeightDeltaText(log){
+      const weight = Number(log.weight) || 0;
+      if(!weight) return { text: "--", className: "" };
+      const delta = weight - getStartBodyState().weight;
+      return {
+        text: `${delta >= 0 ? "+" : ""}${delta.toFixed(1)} kg`,
+        className: delta <= 0 ? "good" : "up"
+      };
+    }
+
+    function updateTodayWeightDelta(){
+      const todayLog = logs[getTodayOffset()];
+      const delta = getWeightDeltaText(todayLog);
+      const deltaEl = document.getElementById("todayWeightDelta");
+      deltaEl.textContent = delta.text;
+      deltaEl.className = `weight-delta ${delta.className}`;
+    }
+
+    function updateWeightLog(id, field, value, scope){
+      logs[id][field] = value;
+      saveLogs();
+      updateSaveStatus(field === "weight" ? "已自動儲存體重" : "已自動儲存體脂");
+      if(id === selected && field === "bodyFat"){
+        document.getElementById("bodyFat").value = value;
+      }
+      renderHeaderOnly();
+      renderHistory();
+      renderWeightTracker(false);
+      if(scope === "today"){
+        updateTodayWeightDelta();
+      }else{
+        renderWeightInputs();
+      }
+      renderWeightCalendar();
+      if(weightSelected !== null) renderWeightDetail();
+    }
+
+    function renderWeightInputs(){
+      const todayId = getTodayOffset();
+      const todayLog = logs[todayId];
+      document.getElementById("todayWeightInput").value = todayLog.weight || "";
+      document.getElementById("todayBodyFatInput").value = todayLog.bodyFat || "";
+      updateTodayWeightDelta();
+    }
+
+    function renderWeightCalendar(){
+      const firstDate = new Date(weightMonth.getFullYear(), weightMonth.getMonth(), 1);
+      const daysInMonth = new Date(weightMonth.getFullYear(), weightMonth.getMonth() + 1, 0).getDate();
+      const { first, last } = getPlanMonthBounds();
+      const logsByDay = logs.reduce((map, log) => {
+        const date = getDateForOffset(log.id);
+        if(sameMonth(date, weightMonth)) map[date.getDate()] = log;
+        return map;
+      }, {});
+      const blanks = Array.from({ length: firstDate.getDay() }, () => `<div class="calendar-empty"></div>`).join("");
+      const cells = Array.from({ length: daysInMonth }, (_, index) => {
+        const day = index + 1;
+        const log = logsByDay[day];
+        if(!log) return `<div class="calendar-off">${day}</div>`;
+        const hasMeasure = Boolean(log.weight || log.bodyFat);
         return `
-          <tr>
-            <td>${formatDate(log.id)}</td>
-            <td>${target.toFixed(1)} kg</td>
-            <td><input class="weight-input" data-weight-id="${log.id}" inputmode="decimal" value="${escapeAttr(log.weight || "")}" placeholder="例：64.6"> kg</td>
-            <td class="weight-delta ${deltaClass}" data-weight-delta="${log.id}">${deltaText}</td>
-          </tr>
+          <button class="calendar-cell ${hasMeasure ? "has-measure" : ""} ${weightSelected !== null && log.id === weightSelected ? "active" : ""}" data-weight-day="${log.id}">
+            <span class="calendar-date">${day}</span>
+            <span class="calendar-emoji">📉</span>
+            <span class="calendar-mini">${log.weight ? `${escapeHtml(log.weight)}kg` : "未填體重"}</span>
+            <span class="calendar-check">${log.bodyFat ? `${escapeHtml(log.bodyFat)}%` : "體脂 --"}</span>
+          </button>
         `;
       }).join("");
 
-      document.querySelectorAll("[data-weight-id]").forEach(input => {
-        input.addEventListener("input", e => {
-          const id = Number(e.target.dataset.weightId);
-          logs[id].weight = e.target.value;
-          saveLogs();
-          updateSaveStatus("已自動儲存體重");
-          const weight = Number(e.target.value) || 0;
-          const deltaCell = document.querySelector(`[data-weight-delta="${id}"]`);
-          if(deltaCell){
-            const delta = weight ? weight - 65 : 0;
-            deltaCell.textContent = weight ? `${delta >= 0 ? "+" : ""}${delta.toFixed(1)} kg` : "--";
-            deltaCell.className = `weight-delta ${weight ? (delta <= 0 ? "good" : "up") : ""}`;
-          }
-          renderHeaderOnly();
-          renderWeightTracker(false);
+      document.getElementById("weightMonthTitle").textContent = formatMonthTitle(weightMonth);
+      document.getElementById("prevWeightMonth").disabled = sameMonth(weightMonth, first);
+      document.getElementById("nextWeightMonth").disabled = sameMonth(weightMonth, last);
+      document.getElementById("weightCalendar").innerHTML = `
+        <div class="calendar-month">
+          <div class="calendar-weekdays">
+            <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+          </div>
+          <div class="calendar-grid">${blanks}${cells}</div>
+        </div>
+      `;
+
+      document.querySelectorAll("[data-weight-day]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          weightSelected = Number(btn.dataset.weightDay);
+          weightMonth = new Date(getDateForOffset(weightSelected).getFullYear(), getDateForOffset(weightSelected).getMonth(), 1);
+          renderWeightCalendar();
+          renderWeightDetail();
         });
       });
+    }
+
+    function renderWeightDetail(){
+      if(weightSelected === null){
+        document.getElementById("weightDetail").innerHTML = "";
+        return;
+      }
+      const log = logs[weightSelected];
+      const target = getTargetWeight(log.id);
+      const delta = getWeightDeltaText(log);
+      document.getElementById("weightDetail").innerHTML = `
+        <div class="weight-detail">
+          <div class="weight-detail-head">
+            <div class="weight-detail-title">
+              <h3>${formatDate(log.id)}</h3>
+              <p>目標 ${target.toFixed(1)} kg</p>
+            </div>
+            <div class="weight-delta ${delta.className}">${delta.text}</div>
+          </div>
+          <div class="weight-detail-grid">
+            <div class="input-card">
+              <label>早晨體重</label>
+              <div class="input-wrap"><input class="weight-input" data-weight-field="weight" data-weight-scope="detail" inputmode="decimal" value="${escapeAttr(log.weight || "")}" placeholder="例：64.6"><span class="suffix">kg</span></div>
+            </div>
+            <div class="input-card">
+              <label>體脂率</label>
+              <div class="input-wrap"><input class="bodyfat-input" data-weight-field="bodyFat" data-weight-scope="detail" inputmode="decimal" value="${escapeAttr(log.bodyFat || "")}" placeholder="例：34.8"><span class="suffix">%</span></div>
+            </div>
+            <div class="weight-quick-summary">
+              <span>和起始比</span>
+              <span class="weight-delta ${delta.className}">${delta.text}</span>
+            </div>
+          </div>
+        </div>
+      `;
     }
 
     function render(){
@@ -641,9 +1292,44 @@
 
       const pill = document.getElementById("todayPill");
       pill.className = `plan-pill ${detail.className}`;
+      const trackRecommendedLoad = shouldTrackLoad(current.type);
 
       const items = document.getElementById("todayItems");
-      items.innerHTML = detail.items.map(item => `<div class="item"><span>✨</span><span>${item}</span></div>`).join("");
+      items.innerHTML = detail.items.map((item, index) => `
+        <div class="item workout-item">
+          <label class="workout-toggle">
+            <input type="checkbox" data-workout-item="${index}" ${current.workoutChecks?.[index] ? "checked" : ""}>
+            <span class="item-check"></span>
+            <span class="item-text">${escapeHtml(item)}</span>
+          </label>
+          ${trackRecommendedLoad ? `<div class="load-wrap">
+            <input class="load-input" data-workout-load="${index}" inputmode="decimal" value="${escapeAttr(current.exerciseLoads?.[index] || "")}" placeholder="重量">
+            <span class="load-unit">kg</span>
+            ${renderPbBadge(item)}
+          </div>` : ""}
+        </div>
+      `).join("");
+
+      document.querySelectorAll("[data-workout-item]").forEach(input => {
+        input.addEventListener("change", e => {
+          const index = Number(e.target.dataset.workoutItem);
+          logs[selected].workoutChecks[index] = e.target.checked;
+          saveLogs();
+          renderHistory();
+        });
+      });
+
+      document.querySelectorAll("[data-workout-load]").forEach(input => {
+        input.addEventListener("input", e => {
+          const index = Number(e.target.dataset.workoutLoad);
+          logs[selected].exerciseLoads[index] = e.target.value;
+          saveLogs();
+          updateSaveStatus("已自動儲存重量");
+          renderHistory();
+        });
+      });
+
+      renderCustomWorkouts();
 
       fields.forEach(field => {
         document.getElementById(field).value = current[field] || "";
@@ -667,15 +1353,76 @@
       document.getElementById("totalBurn").textContent = totalBurn ? String(totalBurn) : "--";
       renderWeightProgress();
 
-      document.getElementById("weekTitle").textContent = `第 ${viewWeek} 週`;
+      document.getElementById("weekTitle").textContent = getWeekTitle(viewWeek);
       renderWeek();
       renderWeightTracker();
+      renderHistory();
+    }
+
+    function renderCustomWorkouts(){
+      const customItems = document.getElementById("customWorkoutItems");
+      const emptyText = document.getElementById("customWorkoutEmpty");
+      const items = logs[selected].customWorkouts || [];
+      emptyText.classList.toggle("hidden", items.length > 0);
+      customItems.innerHTML = items.map((item, index) => `
+        <div class="item custom-item">
+          <label class="custom-toggle">
+            <input type="checkbox" data-custom-workout="${index}" ${item.done ? "checked" : ""}>
+            <span class="item-check"></span>
+            <span class="item-text">${escapeHtml(item.text)}</span>
+          </label>
+          <div class="load-wrap">
+            <input class="load-input" data-custom-workout-load="${index}" inputmode="decimal" value="${escapeAttr(item.load || "")}" placeholder="重量">
+            <span class="load-unit">kg</span>
+            ${renderPbBadge(item.text)}
+          </div>
+          <button type="button" class="custom-delete" data-delete-custom-workout="${index}" aria-label="刪除 ${escapeAttr(item.text)}">×</button>
+        </div>
+      `).join("");
+
+      document.querySelectorAll("[data-custom-workout]").forEach(input => {
+        input.addEventListener("change", e => {
+          const index = Number(e.target.dataset.customWorkout);
+          logs[selected].customWorkouts[index].done = e.target.checked;
+          saveLogs();
+          renderHistory();
+        });
+      });
+
+      document.querySelectorAll("[data-custom-workout-load]").forEach(input => {
+        input.addEventListener("input", e => {
+          const index = Number(e.target.dataset.customWorkoutLoad);
+          logs[selected].customWorkouts[index].load = e.target.value;
+          saveLogs();
+          updateSaveStatus("已自動儲存重量");
+          renderHistory();
+        });
+      });
+
+      document.querySelectorAll("[data-delete-custom-workout]").forEach(button => {
+        button.addEventListener("click", e => {
+          e.preventDefault();
+          const index = Number(button.dataset.deleteCustomWorkout);
+          logs[selected].customWorkouts.splice(index, 1);
+          saveLogs();
+          renderCustomWorkouts();
+          renderHistory();
+        });
+      });
     }
 
     function renderWeek(){
       const weekList = document.getElementById("weekList");
       const weekLogs = logs.filter(l => getWeek(l.id) === viewWeek);
-      weekList.innerHTML = weekLogs.map(log => {
+      const weekStart = getPlanWeekStart(viewWeek);
+      const weekdayLabels = ["一","二","三","四","五","六","日"];
+      const weekDays = weekdayLabels.map((label, index) => {
+        const dayDate = new Date(weekStart);
+        dayDate.setDate(dayDate.getDate() + index);
+        const dayLog = weekLogs.find(log => formatMonthDay(getDateForOffset(log.id)) === formatMonthDay(dayDate));
+        return `<div class="week-day ${dayLog ? "has-plan" : ""}">週${label}<br>${formatMonthDay(dayDate)}</div>`;
+      }).join("");
+      weekList.innerHTML = `<div class="week-days">${weekDays}</div>` + weekLogs.map(log => {
         const d = planNotes[log.type];
         return `
           <button class="day-btn ${selected === log.id ? "active" : ""}" data-id="${log.id}">
@@ -714,14 +1461,194 @@
       });
     }
 
+    function renderHistory(){
+      const firstDate = new Date(historyMonth.getFullYear(), historyMonth.getMonth(), 1);
+      const daysInMonth = new Date(historyMonth.getFullYear(), historyMonth.getMonth() + 1, 0).getDate();
+      const { first, last } = getPlanMonthBounds();
+      const logsByDay = logs.reduce((map, log) => {
+        const date = getDateForOffset(log.id);
+        if(sameMonth(date, historyMonth)) map[date.getDate()] = log;
+        return map;
+      }, {});
+      const blanks = Array.from({ length: firstDate.getDay() }, () => `<div class="calendar-empty"></div>`).join("");
+      const cells = Array.from({ length: daysInMonth }, (_, index) => {
+        const day = index + 1;
+        const log = logsByDay[day];
+        if(!log) return `<div class="calendar-off">${day}</div>`;
+        const d = planNotes[log.type];
+        const doneItems = d.items.filter((_, index) => log.workoutChecks?.[index]).length;
+        const customDoneItems = (log.customWorkouts || []).filter(item => item.done).length;
+        const customTotal = (log.customWorkouts || []).length;
+        const totalDoneItems = doneItems + customDoneItems;
+        const totalItems = d.items.length + customTotal;
+        return `
+          <button class="calendar-cell ${log.done ? "done" : ""} ${historySelected !== null && log.id === historySelected ? "active" : ""}" data-history-day="${log.id}">
+            <span class="calendar-date">${day}</span>
+            <span class="calendar-emoji">${d.emoji}</span>
+            <span class="calendar-mini">${d.tag}</span>
+            <span class="calendar-check">${totalDoneItems}/${totalItems} 項</span>
+          </button>
+        `;
+      }).join("");
+
+      document.getElementById("historyMonthTitle").textContent = formatMonthTitle(historyMonth);
+      document.getElementById("prevHistoryMonth").disabled = sameMonth(historyMonth, first);
+      document.getElementById("nextHistoryMonth").disabled = sameMonth(historyMonth, last);
+      document.getElementById("historyCalendar").innerHTML = `
+        <div class="calendar-month">
+          <div class="calendar-weekdays">
+            <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+          </div>
+          <div class="calendar-grid">${blanks}${cells}</div>
+        </div>
+      `;
+
+      if(historySelected === null){
+        document.getElementById("historyDetail").innerHTML = "";
+      }else{
+        renderHistoryDetail();
+      }
+
+      document.querySelectorAll("[data-history-day]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          historySelected = Number(btn.dataset.historyDay);
+          historyMonth = new Date(getDateForOffset(historySelected).getFullYear(), getDateForOffset(historySelected).getMonth(), 1);
+          renderHistory();
+        });
+      });
+    }
+
+    function renderHistoryDetail(){
+      if(historySelected === null){
+        document.getElementById("historyDetail").innerHTML = "";
+        return;
+      }
+      const log = logs[historySelected];
+      const d = planNotes[log.type];
+      const doneItems = d.items
+        .map((item, index) => ({ text: item, load: log.exerciseLoads?.[index] || "", done: Boolean(log.workoutChecks?.[index]) }))
+        .filter(item => item.done);
+      const customWorkouts = log.customWorkouts || [];
+      const doneCustomItems = customWorkouts.filter(item => item.done);
+      const checkedText = `${doneItems.length + doneCustomItems.length}/${d.items.length + customWorkouts.length}`;
+      const calories = getDailyCalories(log);
+      const stats = [
+        `${checkedText} 項`,
+        calories ? `${calories} kcal` : "",
+        log.protein ? `${escapeHtml(log.protein)}g 蛋白` : "",
+        log.burn ? `${escapeHtml(log.burn)} kcal 消耗` : "",
+        log.weight ? `${escapeHtml(log.weight)}kg` : ""
+      ].filter(Boolean);
+      const recommendedList = doneItems.length
+        ? `<ul class="history-done-list">${doneItems.map(item => `<li>${escapeHtml(item.text)}${item.load ? `｜${escapeHtml(item.load)}kg` : ""}</li>`).join("")}</ul>`
+        : `<p>還沒有勾選完成項目。</p>`;
+      const customList = customWorkouts.length
+        ? `<ul class="history-done-list">${customWorkouts.map(item => `<li>${item.done ? "✓ " : ""}${escapeHtml(item.text)}${item.load ? `｜${escapeHtml(item.load)}kg` : ""}</li>`).join("")}</ul>`
+        : `<p>這天沒有新增自訂運動。</p>`;
+
+      document.getElementById("historyDetail").innerHTML = `
+        <div class="history-selected">
+          <div class="history-selected-head">
+            <span class="history-status ${log.done ? "done" : ""}">${log.done ? "✓" : "+"}</span>
+            <div class="history-main">
+              <div class="history-title">
+                <p class="history-date">${formatDate(log.id)}</p>
+                <span class="tag">${d.tag}</span>
+              </div>
+              <p class="history-sub">${d.emoji} ${d.title}</p>
+            </div>
+            <div class="history-stats">
+              ${stats.map(stat => `<span class="history-stat">${stat}</span>`).join("")}
+            </div>
+          </div>
+          <div class="history-detail">
+            <div class="history-grid">
+              <div class="history-box">
+                <h4>推薦完成</h4>
+                ${recommendedList}
+              </div>
+              <div class="history-box">
+                <h4>自訂運動</h4>
+                ${customList}
+              </div>
+              <div class="history-box">
+                <h4>實際紀錄</h4>
+                <p>${log.actualWorkout ? escapeHtml(log.actualWorkout) : "還沒有記錄實際做了什麼。"}</p>
+              </div>
+              <div class="history-box">
+                <h4>狀態</h4>
+                <p>${log.mood ? escapeHtml(log.mood) : "未填寫"}</p>
+              </div>
+              <div class="history-box">
+                <h4>備註</h4>
+                <p>${log.memo ? escapeHtml(log.memo) : "未填寫"}</p>
+              </div>
+            </div>
+            <button class="history-edit" data-history-edit="${log.id}">編輯這天</button>
+          </div>
+        </div>
+      `;
+
+      document.querySelectorAll("[data-history-edit]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          selected = Number(btn.dataset.historyEdit);
+          weightSelected = selected;
+          weightMonth = new Date(getDateForOffset(weightSelected).getFullYear(), getDateForOffset(weightSelected).getMonth(), 1);
+          historySelected = selected;
+          historyMonth = new Date(getDateForOffset(historySelected).getFullYear(), getDateForOffset(historySelected).getMonth(), 1);
+          viewWeek = getWeek(selected);
+          setMobilePage("checkin");
+          render();
+        });
+      });
+    }
+
     document.getElementById("prevWeek").addEventListener("click", () => {
       viewWeek = Math.max(1, viewWeek - 1);
       render();
     });
 
     document.getElementById("nextWeek").addEventListener("click", () => {
-      viewWeek = Math.min(4, viewWeek + 1);
+      viewWeek = Math.min(getMaxWeek(), viewWeek + 1);
       render();
+    });
+
+    document.getElementById("prevHistoryMonth").addEventListener("click", () => {
+      historyMonth = new Date(historyMonth.getFullYear(), historyMonth.getMonth() - 1, 1);
+      historySelected = null;
+      renderHistory();
+    });
+
+    document.getElementById("nextHistoryMonth").addEventListener("click", () => {
+      historyMonth = new Date(historyMonth.getFullYear(), historyMonth.getMonth() + 1, 1);
+      historySelected = null;
+      renderHistory();
+    });
+
+    document.getElementById("prevWeightMonth").addEventListener("click", () => {
+      weightMonth = new Date(weightMonth.getFullYear(), weightMonth.getMonth() - 1, 1);
+      weightSelected = null;
+      renderWeightCalendar();
+      renderWeightDetail();
+    });
+
+    document.getElementById("nextWeightMonth").addEventListener("click", () => {
+      weightMonth = new Date(weightMonth.getFullYear(), weightMonth.getMonth() + 1, 1);
+      weightSelected = null;
+      renderWeightCalendar();
+      renderWeightDetail();
+    });
+
+    document.getElementById("customWorkoutForm").addEventListener("submit", e => {
+      e.preventDefault();
+      const input = document.getElementById("customWorkoutInput");
+      const text = input.value.trim();
+      if(!text) return;
+      logs[selected].customWorkouts.push({ text, done: false, load: "" });
+      input.value = "";
+      saveLogs();
+      renderCustomWorkouts();
+      renderHistory();
     });
 
     document.getElementById("doneBtn").addEventListener("click", () => {
@@ -737,10 +1664,14 @@
     });
 
     document.getElementById("resetBtn").addEventListener("click", () => {
-      if(confirm("確定要清空所有紀錄嗎？")){
+      if(confirm("確定要清空全部紀錄嗎？這會刪除 28 天內所有飲食、運動、體重、checklist、歷史與備註紀錄。")){
         logs = structuredClone(initialLog);
-        selected = 0;
-        viewWeek = 1;
+        selected = getTodayOffset();
+        weightSelected = null;
+        weightMonth = new Date(getDateForOffset(selected).getFullYear(), getDateForOffset(selected).getMonth(), 1);
+        historySelected = null;
+        historyMonth = new Date(getDateForOffset(selected).getFullYear(), getDateForOffset(selected).getMonth(), 1);
+        viewWeek = getWeek(selected);
         setMobilePage("today");
         saveLogs();
         updateSaveStatus(savedNowText());
@@ -748,8 +1679,10 @@
       }
     });
 
-    function setMobilePage(page){
+    function setMobilePage(page, options = {}){
+      if(!mobilePages.includes(page)) page = "today";
       mobilePage = page;
+      if(options.save !== false) saveMobilePage(page);
       document.body.dataset.mobilePage = page;
       document.querySelectorAll(".tab-btn").forEach(btn => {
         const active = btn.dataset.page === page;
@@ -763,12 +1696,24 @@
       btn.addEventListener("click", () => setMobilePage(btn.dataset.page));
     });
 
+    document.querySelectorAll("[data-mobile-jump]").forEach(btn => {
+      btn.addEventListener("click", () => setMobilePage(btn.dataset.mobileJump));
+    });
+
+    document.addEventListener("input", e => {
+      if(!e.target.matches("[data-weight-field]")) return;
+      const id = e.target.dataset.weightScope === "today" ? getTodayOffset() : weightSelected;
+      updateWeightLog(id, e.target.dataset.weightField, e.target.value, e.target.dataset.weightScope);
+    });
+
     fields.forEach(field => {
       document.getElementById(field).addEventListener("input", e => {
         logs[selected][field] = e.target.value;
         saveLogs();
         updateSaveStatus("已自動儲存");
         renderHeaderOnly();
+        if(field === "bodyFat") renderWeightTracker();
+        renderHistory();
       });
     });
 
@@ -789,6 +1734,7 @@
       renderWeightProgress();
     }
 
+    setMobilePage(mobilePage, { save: false });
     render();
   </script>
 </body>
