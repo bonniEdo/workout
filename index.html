@@ -4,6 +4,21 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>入門健人打卡基地</title>
+  <meta name="description" content="入門健人打卡基地，依目標建立健身菜單，追蹤每日運動、體重體脂、PB 與打卡歷史。" />
+  <link rel="canonical" href="https://bonniedo.github.io/workout/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="入門健人打卡基地" />
+  <meta property="og:title" content="入門健人打卡基地" />
+  <meta property="og:description" content="選擇你的健身目標，建立專屬菜單，追蹤每日運動、體重體脂與打卡歷史。" />
+  <meta property="og:url" content="https://bonniedo.github.io/workout/" />
+  <meta property="og:image" content="https://bonniedo.github.io/workout/assets/og-fitness-preview.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="可愛健身角色與打卡清單插圖" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="入門健人打卡基地" />
+  <meta name="twitter:description" content="選擇你的健身目標，建立專屬菜單，追蹤每日運動、體重體脂與打卡歷史。" />
+  <meta name="twitter:image" content="https://bonniedo.github.io/workout/assets/og-fitness-preview.png" />
   <style>
     :root{
       --bg:#FFF6C7;
@@ -509,7 +524,7 @@
       <form class="setup-form" id="profileForm">
         <div class="input-card">
           <label>暱稱</label>
-          <div class="input-wrap"><input id="profileName" placeholder="例：小美"></div>
+          <div class="input-wrap"><input id="profileName" placeholder="輸入暱稱"></div>
         </div>
         <div class="input-card">
           <label>開始日期</label>
@@ -533,19 +548,19 @@
         </div>
         <div class="input-card">
           <label>起始體重</label>
-          <div class="input-wrap"><input id="profileInitialWeight" inputmode="decimal" placeholder="例：65"><span class="suffix">kg</span></div>
+          <div class="input-wrap"><input id="profileInitialWeight" inputmode="decimal" placeholder="輸入數字"><span class="suffix">kg</span></div>
         </div>
         <div class="input-card">
           <label>起始體脂</label>
-          <div class="input-wrap"><input id="profileInitialBodyFat" inputmode="decimal" placeholder="例：35"><span class="suffix">%</span></div>
+          <div class="input-wrap"><input id="profileInitialBodyFat" inputmode="decimal" placeholder="輸入數字"><span class="suffix">%</span></div>
         </div>
         <div class="input-card">
           <label>目標體重</label>
-          <div class="input-wrap"><input id="profileTargetWeight" inputmode="decimal" placeholder="例：60"><span class="suffix">kg</span></div>
+          <div class="input-wrap"><input id="profileTargetWeight" inputmode="decimal" placeholder="輸入數字"><span class="suffix">kg</span></div>
         </div>
         <div class="input-card">
           <label>目標體脂</label>
-          <div class="input-wrap"><input id="profileTargetBodyFat" inputmode="decimal" placeholder="例：30"><span class="suffix">%</span></div>
+          <div class="input-wrap"><input id="profileTargetBodyFat" inputmode="decimal" placeholder="輸入數字"><span class="suffix">%</span></div>
         </div>
         <div class="setup-actions">
           <p class="setup-note">這些資料只存在這台裝置的瀏覽器裡。之後可以在「目標」分頁調整。</p>
@@ -576,8 +591,8 @@
               </summary>
               <div class="start-status-body">
                 <div class="status-values">
-                  <span class="status-main" id="startWeightText">65.0kg</span>
-                  <span class="status-main" id="startBodyFatText">35.0%</span>
+                  <span class="status-main" id="startWeightText">--kg</span>
+                  <span class="status-main" id="startBodyFatText">--%</span>
                 </div>
               </div>
             </details>
@@ -585,8 +600,8 @@
           <div class="status-card">
             <p class="status-label">Current｜最新紀錄</p>
             <div class="status-values">
-              <span class="status-main" id="currentWeightText">65.0kg</span>
-              <span class="status-main" id="currentBodyFatText">35.0%</span>
+              <span class="status-main" id="currentWeightText">--kg</span>
+              <span class="status-main" id="currentBodyFatText">--%</span>
             </div>
             <p class="status-note" id="currentStateNote">尚未填寫時先顯示起始狀態</p>
           </div>
@@ -700,19 +715,19 @@
               <div class="meal-group">
                 <div class="input-card">
                   <label>🌞 早餐</label>
-                  <div class="input-wrap"><input id="breakfastCalories" inputmode="decimal" placeholder="例：350"><span class="suffix">kcal</span></div>
+                  <div class="input-wrap"><input id="breakfastCalories" inputmode="decimal" placeholder="輸入數字"><span class="suffix">kcal</span></div>
                 </div>
                 <div class="input-card">
                   <label>🍱 午餐</label>
-                  <div class="input-wrap"><input id="lunchCalories" inputmode="decimal" placeholder="例：550"><span class="suffix">kcal</span></div>
+                  <div class="input-wrap"><input id="lunchCalories" inputmode="decimal" placeholder="輸入數字"><span class="suffix">kcal</span></div>
                 </div>
                 <div class="input-card">
                   <label>🌙 晚餐</label>
-                  <div class="input-wrap"><input id="dinnerCalories" inputmode="decimal" placeholder="例：500"><span class="suffix">kcal</span></div>
+                  <div class="input-wrap"><input id="dinnerCalories" inputmode="decimal" placeholder="輸入數字"><span class="suffix">kcal</span></div>
                 </div>
                 <div class="input-card">
                   <label>🥤 零食飲料</label>
-                  <div class="input-wrap"><input id="snackCalories" inputmode="decimal" placeholder="例：150"><span class="suffix">kcal</span></div>
+                  <div class="input-wrap"><input id="snackCalories" inputmode="decimal" placeholder="輸入數字"><span class="suffix">kcal</span></div>
                 </div>
                 <div class="meal-total">
                   <span>今日熱量合計</span>
@@ -733,15 +748,15 @@
               <div class="inputs">
                 <div class="input-card">
                   <label>🥚 蛋白質</label>
-                  <div class="input-wrap"><input id="protein" inputmode="decimal" placeholder="例：105"><span class="suffix">g</span></div>
+                  <div class="input-wrap"><input id="protein" inputmode="decimal" placeholder="輸入數字"><span class="suffix">g</span></div>
                 </div>
                 <div class="input-card">
                   <label>📉 體脂率</label>
-                  <div class="input-wrap"><input id="bodyFat" inputmode="decimal" placeholder="例：34.8"><span class="suffix">%</span></div>
+                  <div class="input-wrap"><input id="bodyFat" inputmode="decimal" placeholder="輸入數字"><span class="suffix">%</span></div>
                 </div>
                 <div class="input-card">
                   <label>💧 喝水量</label>
-                  <div class="input-wrap"><input id="water" inputmode="decimal" placeholder="例：1800"><span class="suffix">ml</span></div>
+                  <div class="input-wrap"><input id="water" inputmode="decimal" placeholder="輸入數字"><span class="suffix">ml</span></div>
                 </div>
               </div>
             </div>
@@ -758,7 +773,7 @@
               <div class="two">
                 <div class="input-card">
                   <label>🔥 手錶運動消耗</label>
-                  <div class="input-wrap"><input id="burn" inputmode="decimal" placeholder="例：420"><span class="suffix">kcal</span></div>
+                  <div class="input-wrap"><input id="burn" inputmode="decimal" placeholder="輸入數字"><span class="suffix">kcal</span></div>
                 </div>
                 <div class="mood">
                   <label class="small-label">今天狀態</label>
@@ -788,7 +803,7 @@
             <div class="group-body">
               <div class="memo">
                 <label class="small-label">實際做了什麼</label>
-                <textarea id="actualWorkout" placeholder="例：腿推 30kg 4 組、划船 20kg 3 組、最後快走 15 分鐘..."></textarea>
+                <textarea id="actualWorkout" placeholder="寫下今天實際完成的內容..."></textarea>
               </div>
 
               <div class="memo">
@@ -813,11 +828,11 @@
         <div class="weight-quick">
           <div class="input-card">
             <label>今日體重</label>
-            <div class="input-wrap"><input id="todayWeightInput" data-weight-field="weight" data-weight-scope="today" inputmode="decimal" placeholder="例：64.6"><span class="suffix">kg</span></div>
+            <div class="input-wrap"><input id="todayWeightInput" data-weight-field="weight" data-weight-scope="today" inputmode="decimal" placeholder="輸入數字"><span class="suffix">kg</span></div>
           </div>
           <div class="input-card">
             <label>今日體脂</label>
-            <div class="input-wrap"><input id="todayBodyFatInput" data-weight-field="bodyFat" data-weight-scope="today" inputmode="decimal" placeholder="例：34.8"><span class="suffix">%</span></div>
+            <div class="input-wrap"><input id="todayBodyFatInput" data-weight-field="bodyFat" data-weight-scope="today" inputmode="decimal" placeholder="輸入數字"><span class="suffix">%</span></div>
           </div>
           <div class="weight-quick-summary">
             <span>今日變化</span>
@@ -898,17 +913,17 @@
       name: "",
       startDate: new Date().toISOString().slice(0, 10),
       planLength: 28,
-      initialWeight: 65,
-      initialBodyFat: 35,
-      targetWeight: 60,
-      targetBodyFat: 30,
+      initialWeight: "",
+      initialBodyFat: "",
+      targetWeight: "",
+      targetBodyFat: "",
       goalType: "fatLoss",
       initialized: false
     };
     let profile = loadProfile();
     let startDate = getProfileStartDate();
-    let initialBodyState = { weight: Number(profile.initialWeight) || 65, bodyFat: Number(profile.initialBodyFat) || 35 };
-    let targetBodyState = { weight: Number(profile.targetWeight) || 60, bodyFat: Number(profile.targetBodyFat) || 30 };
+    let initialBodyState = { weight: Number(profile.initialWeight) || 0, bodyFat: Number(profile.initialBodyFat) || 0 };
+    let targetBodyState = { weight: Number(profile.targetWeight) || 0, bodyFat: Number(profile.targetBodyFat) || 0 };
 
     const workoutTemplates = {
       fatLoss: {
@@ -1072,7 +1087,7 @@
 
     function createInitialLog(){
       return dayPlans.map((p, i) => ({
-      id: i, done: false, breakfastCalories: "", lunchCalories: "", dinnerCalories: "", snackCalories: "", calories: "", protein: "", burn: "", weight: i === 0 ? String(initialBodyState.weight) : "", bodyFat: i === 0 ? String(initialBodyState.bodyFat) : "", water: "", mood: "", actualWorkout: "", memo: "", workoutChecks: [], exerciseLoads: [], customWorkouts: [], ...p
+      id: i, done: false, breakfastCalories: "", lunchCalories: "", dinnerCalories: "", snackCalories: "", calories: "", protein: "", burn: "", weight: i === 0 && initialBodyState.weight ? String(initialBodyState.weight) : "", bodyFat: i === 0 && initialBodyState.bodyFat ? String(initialBodyState.bodyFat) : "", water: "", mood: "", actualWorkout: "", memo: "", workoutChecks: [], exerciseLoads: [], customWorkouts: [], ...p
       }));
     }
 
@@ -1086,8 +1101,8 @@
         merged.breakfastCalories = merged.calories;
       }
       if(merged.id === 0){
-        if(!merged.weight) merged.weight = String(initialBodyState.weight);
-        if(!merged.bodyFat) merged.bodyFat = String(initialBodyState.bodyFat);
+        if(!merged.weight && initialBodyState.weight) merged.weight = String(initialBodyState.weight);
+        if(!merged.bodyFat && initialBodyState.bodyFat) merged.bodyFat = String(initialBodyState.bodyFat);
       }
       const itemCount = planNotes[merged.type]?.items.length || 0;
       merged.workoutChecks = Array.from({ length: itemCount }, (_, index) => Boolean(merged.workoutChecks?.[index]));
@@ -1159,12 +1174,12 @@
     function syncProfileState(){
       startDate = getProfileStartDate();
       initialBodyState = {
-        weight: Number(profile.initialWeight) || defaultProfile.initialWeight,
-        bodyFat: Number(profile.initialBodyFat) || defaultProfile.initialBodyFat
+        weight: Number(profile.initialWeight) || 0,
+        bodyFat: Number(profile.initialBodyFat) || 0
       };
       targetBodyState = {
-        weight: Number(profile.targetWeight) || defaultProfile.targetWeight,
-        bodyFat: Number(profile.targetBodyFat) || defaultProfile.targetBodyFat
+        weight: Number(profile.targetWeight) || 0,
+        bodyFat: Number(profile.targetBodyFat) || 0
       };
       baseDayPlans = createBaseDayPlans(profile.goalType);
       dayPlans = createDayPlans(profile.planLength);
@@ -1227,10 +1242,10 @@
         startDate: document.getElementById("profileStartDate").value || defaultProfile.startDate,
         planLength: Number(document.getElementById("profilePlanLength").value) || 28,
         goalType: document.getElementById("profileGoalType").value || "fatLoss",
-        initialWeight: Number(document.getElementById("profileInitialWeight").value) || defaultProfile.initialWeight,
-        initialBodyFat: Number(document.getElementById("profileInitialBodyFat").value) || defaultProfile.initialBodyFat,
-        targetWeight: Number(document.getElementById("profileTargetWeight").value) || defaultProfile.targetWeight,
-        targetBodyFat: Number(document.getElementById("profileTargetBodyFat").value) || defaultProfile.targetBodyFat,
+        initialWeight: document.getElementById("profileInitialWeight").value.trim(),
+        initialBodyFat: document.getElementById("profileInitialBodyFat").value.trim(),
+        targetWeight: document.getElementById("profileTargetWeight").value.trim(),
+        targetBodyFat: document.getElementById("profileTargetBodyFat").value.trim(),
         initialized: true
       };
     }
@@ -1244,7 +1259,7 @@
       document.getElementById("cancelProfileEditBtn").classList.toggle("hidden", !profile.initialized);
       document.getElementById("planNameChip").textContent = planName;
       document.getElementById("appTitle").innerHTML = `${escapeHtml(profile.name || "我的")} 健身追蹤<br>`;
-      document.getElementById("profileSummary").textContent = `${profile.name || "我的"}｜${template.label}｜${formatMonthDay(start)} 開始｜${logs.length} 天｜${formatNumber(initialBodyState.weight)}kg / ${formatNumber(initialBodyState.bodyFat)}% → ${formatNumber(targetBodyState.weight)}kg / ${formatNumber(targetBodyState.bodyFat)}%`;
+      document.getElementById("profileSummary").textContent = `${profile.name || "我的"}｜${template.label}｜${formatMonthDay(start)} 開始｜${logs.length} 天｜${formatOptionalNumber(initialBodyState.weight, "kg")} / ${formatOptionalNumber(initialBodyState.bodyFat, "%")} → ${formatOptionalNumber(targetBodyState.weight, "kg")} / ${formatOptionalNumber(targetBodyState.bodyFat, "%")}`;
       document.getElementById("dietGoalText").textContent = template.diet;
       document.getElementById("trainingGoalText").textContent = template.training;
       document.getElementById("phaseGoalText").textContent = `${formatMonthDay(start)} 到 ${formatMonthDay(end)}：${template.summary}`;
@@ -1338,6 +1353,7 @@
 
     function getTargetWeight(id){
       const startWeight = getStartBodyState().weight;
+      if(!startWeight || !targetBodyState.weight) return startWeight || 0;
       const totalLoss = startWeight - targetBodyState.weight;
       return startWeight - (totalLoss * (id / (logs.length - 1)));
     }
@@ -1370,12 +1386,17 @@
       return Number(value).toFixed(digits);
     }
 
+    function formatOptionalNumber(value, suffix = "", digits = 1){
+      const num = Number(value);
+      return num ? `${num.toFixed(digits)}${suffix}` : `--${suffix}`;
+    }
+
     function getWeightStats(){
       const startState = getStartBodyState();
       const latestState = getLatestBodyState();
       const targetLoss = startState.weight - targetBodyState.weight;
       const latestWeight = latestState.weight;
-      const lost = Math.max(0, startState.weight - latestWeight);
+      const lost = startState.weight && latestWeight ? Math.max(0, startState.weight - latestWeight) : 0;
       const weightProgress = targetLoss > 0 ? Math.min(100, Math.max(0, Math.round((lost / targetLoss) * 100))) : 0;
       return { latestWeight, lost, weightProgress };
     }
@@ -1387,16 +1408,20 @@
       const weightDelta = latestState.weight - startState.weight;
       const bodyFatDelta = latestState.bodyFat - startState.bodyFat;
       document.getElementById("planStartChip").textContent = `開始：${startState.date.getFullYear()}/${startState.date.getMonth() + 1}/${startState.date.getDate()}`;
-      document.getElementById("startWeightText").textContent = `${formatNumber(startState.weight)}kg`;
-      document.getElementById("startBodyFatText").textContent = `${formatNumber(startState.bodyFat)}%`;
-      document.getElementById("currentWeightText").textContent = `${formatNumber(latestState.weight)}kg`;
-      document.getElementById("currentBodyFatText").textContent = `${formatNumber(latestState.bodyFat)}%`;
+      document.getElementById("startWeightText").textContent = formatOptionalNumber(startState.weight, "kg");
+      document.getElementById("startBodyFatText").textContent = formatOptionalNumber(startState.bodyFat, "%");
+      document.getElementById("currentWeightText").textContent = formatOptionalNumber(latestState.weight, "kg");
+      document.getElementById("currentBodyFatText").textContent = formatOptionalNumber(latestState.bodyFat, "%");
       document.getElementById("startStateNote").textContent = `${formatDate(0)} 起始記錄`;
       document.getElementById("currentStateNote").textContent = latestState.date
         ? `最新：${formatMonthDay(latestState.date)}｜體重 ${weightDelta >= 0 ? "+" : ""}${weightDelta.toFixed(1)}kg，體脂 ${bodyFatDelta >= 0 ? "+" : ""}${bodyFatDelta.toFixed(1)}%`
         : "尚未填寫時先顯示起始狀態";
-      document.getElementById("weightGoalLabel").textContent = `體重目標進度：${formatNumber(startState.weight)}kg → ${formatNumber(targetBodyState.weight)}kg`;
-      document.getElementById("weightLost").textContent = `${lost.toFixed(1)} / ${(startState.weight - targetBodyState.weight).toFixed(1)} kg`;
+      document.getElementById("weightGoalLabel").textContent = startState.weight && targetBodyState.weight
+        ? `體重目標進度：${formatNumber(startState.weight)}kg → ${formatNumber(targetBodyState.weight)}kg`
+        : "體重目標進度";
+      document.getElementById("weightLost").textContent = startState.weight && targetBodyState.weight
+        ? `${lost.toFixed(1)} / ${(startState.weight - targetBodyState.weight).toFixed(1)} kg`
+        : "-- / -- kg";
       document.getElementById("weightBar").style.width = `${weightProgress}%`;
     }
 
@@ -1442,10 +1467,12 @@
       const startState = getStartBodyState();
       const actualWeights = logs.map(l => Number(l.weight)).filter(Boolean);
       const actualBodyFats = logs.map(l => Number(l.bodyFat)).filter(Boolean);
-      const minWeight = Math.floor(Math.min(59, targetBodyState.weight, ...actualWeights)) - 0.5;
-      const maxWeight = Math.ceil(Math.max(66, startState.weight, ...actualWeights)) + 0.5;
-      const minBodyFat = Math.floor(Math.min(28, targetBodyState.bodyFat, ...actualBodyFats)) - 0.5;
-      const maxBodyFat = Math.ceil(Math.max(36, startState.bodyFat, ...actualBodyFats)) + 0.5;
+      const weightScaleValues = [targetBodyState.weight, startState.weight, ...actualWeights].filter(Boolean);
+      const bodyFatScaleValues = [targetBodyState.bodyFat, startState.bodyFat, ...actualBodyFats].filter(Boolean);
+      const minWeight = Math.floor(Math.min(...(weightScaleValues.length ? weightScaleValues : [0]))) - 0.5;
+      const maxWeight = Math.ceil(Math.max(...(weightScaleValues.length ? weightScaleValues : [1]))) + 0.5;
+      const minBodyFat = Math.floor(Math.min(...(bodyFatScaleValues.length ? bodyFatScaleValues : [0]))) - 0.5;
+      const maxBodyFat = Math.ceil(Math.max(...(bodyFatScaleValues.length ? bodyFatScaleValues : [1]))) + 0.5;
       const left = 46;
       const right = 50;
       const top = 18;
@@ -1613,18 +1640,18 @@
           <div class="weight-detail-head">
             <div class="weight-detail-title">
               <h3>${formatDate(log.id)}</h3>
-              <p>目標 ${target.toFixed(1)} kg</p>
+              <p>目標 ${target ? `${target.toFixed(1)} kg` : "--"}</p>
             </div>
             <div class="weight-delta ${delta.className}">${delta.text}</div>
           </div>
           <div class="weight-detail-grid">
             <div class="input-card">
               <label>早晨體重</label>
-              <div class="input-wrap"><input class="weight-input" data-weight-field="weight" data-weight-scope="detail" inputmode="decimal" value="${escapeAttr(log.weight || "")}" placeholder="例：64.6"><span class="suffix">kg</span></div>
+              <div class="input-wrap"><input class="weight-input" data-weight-field="weight" data-weight-scope="detail" inputmode="decimal" value="${escapeAttr(log.weight || "")}" placeholder="輸入數字"><span class="suffix">kg</span></div>
             </div>
             <div class="input-card">
               <label>體脂率</label>
-              <div class="input-wrap"><input class="bodyfat-input" data-weight-field="bodyFat" data-weight-scope="detail" inputmode="decimal" value="${escapeAttr(log.bodyFat || "")}" placeholder="例：34.8"><span class="suffix">%</span></div>
+              <div class="input-wrap"><input class="bodyfat-input" data-weight-field="bodyFat" data-weight-scope="detail" inputmode="decimal" value="${escapeAttr(log.bodyFat || "")}" placeholder="輸入數字"><span class="suffix">%</span></div>
             </div>
             <div class="weight-quick-summary">
               <span>和起始比</span>
