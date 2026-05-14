@@ -196,7 +196,9 @@
     .tip{background:#ecfccb}
     .small-label{display:block;color:#a16207;font-size:12px;font-weight:1000;letter-spacing:.16em;text-transform:uppercase;margin-bottom:8px}
     select,textarea{width:100%;border:0;outline:0;background:#fff;border-radius:18px;padding:13px 14px;box-shadow:inset 0 0 0 1px #f5f5f4;font-weight:750;color:#292524}
+    select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23292524' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C%2Fsvg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
     .tip p{margin:0;background:#fff;border-radius:18px;padding:13px 14px;font-size:14px;line-height:1.7;font-weight:700;color:#57534e}
+    .tdee-tag{font-size:10px;font-weight:900;color:#a16207;background:#fef3c7;border-radius:999px;padding:2px 7px;letter-spacing:.03em;text-transform:none;vertical-align:middle;margin-left:5px}
     .memo{background:#fafaf9;margin-top:12px}
     .memo .small-label{color:#a8a29e}
     textarea{min-height:110px;resize:vertical;font-size:14px;line-height:1.6;font-weight:600}
@@ -578,7 +580,7 @@
           <div class="input-wrap"><input id="profileTargetBodyFat" inputmode="decimal" placeholder="輸入數字"><span class="suffix">%</span></div>
         </div>
         <div class="input-card">
-          <label>性別</label>
+          <label>性別<span class="tdee-tag">TDEE</span></label>
           <div class="input-wrap">
             <select id="profileSex">
               <option value="">不設定</option>
@@ -588,15 +590,15 @@
           </div>
         </div>
         <div class="input-card">
-          <label>年齡</label>
+          <label>年齡<span class="tdee-tag">TDEE</span></label>
           <div class="input-wrap"><input id="profileAge" inputmode="numeric" placeholder="輸入數字"><span class="suffix">歲</span></div>
         </div>
         <div class="input-card">
-          <label>身高</label>
+          <label>身高<span class="tdee-tag">TDEE</span></label>
           <div class="input-wrap"><input id="profileHeight" inputmode="decimal" placeholder="輸入數字"><span class="suffix">cm</span></div>
         </div>
         <div class="input-card">
-          <label>活動量</label>
+          <label>活動量<span class="tdee-tag">TDEE</span></label>
           <div class="input-wrap">
             <select id="profileActivity">
               <option value="">不設定</option>
@@ -608,8 +610,8 @@
           </div>
         </div>
         <div class="input-card">
-          <label>自訂 TDEE</label>
-          <div class="input-wrap"><input id="profileTdee" inputmode="numeric" placeholder="可留空"><span class="suffix">kcal</span></div>
+          <label>自訂 TDEE<span class="tdee-tag">優先採用</span></label>
+          <div class="input-wrap"><input id="profileTdee" inputmode="numeric" placeholder="填入後略過估算"><span class="suffix">kcal</span></div>
         </div>
         <div class="setup-actions">
           <p class="setup-note">這些資料只存在這台裝置的瀏覽器裡。之後可以在「目標」分頁調整。</p>
