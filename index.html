@@ -1254,7 +1254,8 @@
         <div class="data-actions">
           <button id="exportDataBtn" class="secondary-button">匯出我的紀錄</button>
           <button id="copyBackupBtn" class="secondary-button">複製備份碼</button>
-          <button id="importDataBtn" class="secondary-button">匯入紀錄</button>
+          <button id="pasteBackupBtn" class="secondary-button">貼上備份碼匯入</button>
+          <button id="importDataBtn" class="secondary-button">匯入 JSON 檔</button>
           <input id="importDataInput" class="file-input-hidden" type="file" accept="application/json,.json">
         </div>
         <p id="resetDescription">這是危險操作。清空後會刪除目前計畫內所有飲食、運動、體重、checklist、歷史與備註紀錄。</p>
@@ -2672,6 +2673,18 @@
       }catch(e){
         window.prompt("複製下面這段備份碼：", text);
         updateSaveStatus("請手動複製備份碼");
+      }
+    });
+
+    document.getElementById("pasteBackupBtn").addEventListener("click", () => {
+      const text = window.prompt("請貼上備份碼：");
+      if(!text?.trim()) return;
+      try{
+        const payload = JSON.parse(text);
+        if(!confirm("匯入後會覆蓋目前這台裝置裡的紀錄。確定要匯入嗎？")) return;
+        restoreBackupPayload(payload);
+      }catch(error){
+        alert("匯入失敗，請確認備份碼是否完整。");
       }
     });
 
