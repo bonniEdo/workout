@@ -3,6 +3,9 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>入門健人打卡基地</title>
   <meta name="description" content="入門健人打卡基地，依目標建立健身菜單，追蹤每日運動、體重體脂、PB 與打卡歷史。" />
   <link rel="canonical" href="https://bonniedo.github.io/workout/" />
@@ -322,6 +325,9 @@
     .danger-zone h3{margin:0 0 6px;font-size:17px;font-weight:1000;color:#991b1b}
     .danger-zone p{margin:0;color:#78716c;font-size:14px;line-height:1.75;font-weight:600}
     .danger-button{margin-top:14px;border:0;border-radius:4px;background:#dc2626;color:#fff;padding:11px 18px;font-size:12px;font-weight:1000;letter-spacing:.08em;text-transform:uppercase}
+    .data-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .data-actions button{margin-top:0}
+    .file-input-hidden{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
     /* setup */
     .setup-panel{margin-bottom:20px}
     .setup-panel.hidden{display:none}
@@ -1007,7 +1013,7 @@
         </div>
         <p class="today-note" id="todayNote">簽約後先輕量熟悉器材，不要練到爆痠。</p>
         <details class="warmup-box" open>
-          <summary>熱身建議</summary>
+          <summary>熱身建議｜10 mins</summary>
           <ul class="warmup-list" id="todayWarmupItems"></ul>
         </details>
         <details class="recommended-workouts" open>
@@ -1244,6 +1250,13 @@
       </div>
       <div class="danger-zone">
         <h3>資料管理</h3>
+        <p>建議定期備份。匯出的檔案包含個人設定、飲食、運動、體重體脂、checklist、自由運動與歷史紀錄。</p>
+        <div class="data-actions">
+          <button id="exportDataBtn" class="secondary-button">匯出我的紀錄</button>
+          <button id="copyBackupBtn" class="secondary-button">複製備份碼</button>
+          <button id="importDataBtn" class="secondary-button">匯入紀錄</button>
+          <input id="importDataInput" class="file-input-hidden" type="file" accept="application/json,.json">
+        </div>
         <p id="resetDescription">這是危險操作。清空後會刪除目前計畫內所有飲食、運動、體重、checklist、歷史與備註紀錄。</p>
         <button id="resetBtn" class="danger-button">清空全部紀錄</button>
         <p style="margin-top:16px">如果要連暱稱、開始日期、目標類型、起始與目標數據一起刪除，請使用下面這個操作。</p>
@@ -1253,6 +1266,7 @@
   </main>
 
   <script>
+    const APP_VERSION = "2026-05-15-warmup-10min";
     const PROFILE_KEY = "fitness_tracker_profile_v1";
     const STORAGE_KEY = "fitness_tracker_logs_v1";
     const PAGE_STORAGE_KEY = `${STORAGE_KEY}_mobile_page`;
@@ -1598,6 +1612,43 @@
 
     function saveMobilePage(page){
       localStorage.setItem(PAGE_STORAGE_KEY, page);
+    }
+
+    function createBackupPayload(){
+      return {
+        app: "workout-tracker",
+        version: APP_VERSION,
+        exportedAt: new Date().toISOString(),
+        profile: { ...profile, initialized: true },
+        logs
+      };
+    }
+
+    function getBackupJson(){
+      return JSON.stringify(createBackupPayload(), null, 2);
+    }
+
+    function restoreBackupPayload(payload){
+      if(!payload || typeof payload !== "object") throw new Error("備份檔格式不正確。");
+      const nextProfile = { ...defaultProfile, ...(payload.profile || {}), initialized: true };
+      const nextLogs = payload.logs;
+      if(!Array.isArray(nextLogs)) throw new Error("備份檔缺少紀錄資料。");
+      profile = nextProfile;
+      saveProfile();
+      syncProfileState();
+      logs = initialLog.map((base, index) => normalizeLog(nextLogs[index] || {}, base));
+      selected = getTodayOffset();
+      weightSelected = null;
+      weightMonth = new Date(getDateForOffset(selected).getFullYear(), getDateForOffset(selected).getMonth(), 1);
+      historySelected = null;
+      historyMonth = new Date(getDateForOffset(selected).getFullYear(), getDateForOffset(selected).getMonth(), 1);
+      viewWeek = getWeek(selected);
+      mobilePage = "today";
+      saveLogs();
+      fillProfileForm();
+      setMobilePage("today", { save: false });
+      updateSaveStatus("已匯入備份");
+      render();
     }
 
     function updateSaveStatus(text){
@@ -2599,6 +2650,53 @@
       updateSaveStatus(savedNowText());
     });
 
+    document.getElementById("exportDataBtn").addEventListener("click", () => {
+      const blob = new Blob([getBackupJson()], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      const dateText = new Date().toISOString().slice(0, 10);
+      link.href = url;
+      link.download = `workout-backup-${dateText}.json`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      updateSaveStatus("已匯出備份檔");
+    });
+
+    document.getElementById("copyBackupBtn").addEventListener("click", async () => {
+      const text = getBackupJson();
+      try{
+        await navigator.clipboard.writeText(text);
+        updateSaveStatus("已複製備份碼");
+      }catch(e){
+        window.prompt("複製下面這段備份碼：", text);
+        updateSaveStatus("請手動複製備份碼");
+      }
+    });
+
+    document.getElementById("importDataBtn").addEventListener("click", () => {
+      document.getElementById("importDataInput").click();
+    });
+
+    document.getElementById("importDataInput").addEventListener("change", e => {
+      const file = e.target.files?.[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try{
+          const payload = JSON.parse(String(reader.result || ""));
+          if(!confirm("匯入後會覆蓋目前這台裝置裡的紀錄。確定要匯入嗎？")) return;
+          restoreBackupPayload(payload);
+        }catch(error){
+          alert(error.message || "匯入失敗，請確認備份檔是否正確。");
+        }finally{
+          e.target.value = "";
+        }
+      };
+      reader.readAsText(file);
+    });
+
     document.getElementById("resetBtn").addEventListener("click", () => {
       if(confirm(`確定要清空全部紀錄嗎？這會刪除 ${logs.length} 天內所有飲食、運動、體重、checklist、歷史與備註紀錄。`)){
         logs = structuredClone(initialLog);
@@ -2695,6 +2793,7 @@
     }
 
     fillProfileForm();
+    document.body.dataset.appVersion = APP_VERSION;
     setMobilePage(mobilePage, { save: false });
     render();
   </script>
