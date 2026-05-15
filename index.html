@@ -130,7 +130,7 @@
     .custom-workouts{margin-top:16px;border-top:1px solid rgba(255,255,255,.1);padding-top:16px}
     .custom-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:10px}
     .custom-head p{margin:0;color:#fde68a;font-size:11px;font-weight:900;letter-spacing:.16em;text-transform:uppercase}
-    .custom-workout-form{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:10px}
+    .custom-workout-form{display:grid;grid-template-columns:minmax(0,1fr) 86px 86px auto;gap:8px;margin-bottom:10px}
     .custom-workout-form input{min-width:0;border:0;outline:0;border-radius:5px;background:rgba(255,255,255,.1);color:#fff;padding:12px 13px;font-size:14px;font-weight:800}
     .custom-workout-form input::placeholder{color:#78716c}
     .custom-workout-form button,.custom-delete{border:0;border-radius:5px;background:#bef264;color:#365314;font-size:13px;font-weight:900;padding:0 14px;letter-spacing:.04em}
@@ -147,6 +147,8 @@
     .load-input{width:64px;border:0;outline:0;border-radius:4px;background:rgba(255,255,255,.12);color:#fff;padding:9px 8px;font-size:13px;font-weight:1000;text-align:center}
     .load-input::placeholder{color:#78716c}
     .load-unit{font-size:11px;font-weight:900;color:#a8a29e}
+    .custom-count-input{width:56px}
+    .custom-item .load-wrap{flex-wrap:wrap}
     .pb-badge{border-radius:3px;background:rgba(190,242,100,.14);color:#bef264;padding:3px 6px;font-size:10px;font-weight:900;letter-spacing:.04em;white-space:nowrap}
     .custom-empty{margin:0;color:#78716c;font-size:13px;line-height:1.6;font-weight:700}
     .mobile-quick-actions{display:none}
@@ -713,9 +715,9 @@
       .workout-toggle{padding:12px 8px 12px 11px}
       .workout-item .load-wrap{padding:10px 11px 10px 0;justify-content:flex-end}
       .workout-item .load-input{width:68px}
-      .custom-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:0;padding:0;align-items:center;padding-right:42px}
+      .custom-item{display:block;padding:0;position:relative;padding-right:42px}
       .custom-toggle{padding:12px 8px 12px 11px}
-      .custom-item .load-wrap{padding:10px 0;justify-content:flex-end}
+      .custom-item .load-wrap{padding:0 0 10px 45px;justify-content:flex-start}
       .custom-item .load-input{width:64px}
       .custom-delete{position:absolute;right:6px;top:50%;transform:translateY(-50%);min-height:34px;align-self:auto}
       .mobile-quick-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
@@ -1018,6 +1020,8 @@
           </div>
           <form class="custom-workout-form" id="customWorkoutForm">
             <input id="customWorkoutInput" autocomplete="off" placeholder="新增這天想做的項目">
+            <input id="customWorkoutSets" inputmode="numeric" placeholder="組數">
+            <input id="customWorkoutReps" inputmode="numeric" placeholder="次數">
             <button type="submit">新增</button>
           </form>
           <div class="items" id="customWorkoutItems"></div>
@@ -1100,22 +1104,30 @@
             <summary>
               <div class="group-title">
                 <p>Body</p>
-                <h3>身體數據</h3>
+                <h3>身體數據 <span class="tdee-tag" id="recordBodyDate">--</span></h3>
               </div>
             </summary>
             <div class="group-body">
               <div class="inputs">
+                <div class="input-card">
+                  <label>⚖️ 體重</label>
+                  <div class="input-wrap"><input id="recordWeightInput" data-weight-field="weight" data-weight-scope="record" inputmode="decimal" placeholder="輸入數字"><span class="suffix">kg</span></div>
+                </div>
                 <div class="input-card">
                   <label>🥚 蛋白質</label>
                   <div class="input-wrap"><input id="protein" inputmode="decimal" placeholder="輸入數字"><span class="suffix">g</span></div>
                 </div>
                 <div class="input-card">
                   <label>📉 體脂率</label>
-                  <div class="input-wrap"><input id="bodyFat" inputmode="decimal" placeholder="輸入數字"><span class="suffix">%</span></div>
+                  <div class="input-wrap"><input id="recordBodyFatInput" data-weight-field="bodyFat" data-weight-scope="record" inputmode="decimal" placeholder="輸入數字"><span class="suffix">%</span></div>
                 </div>
                 <div class="input-card">
                   <label>💧 喝水量</label>
                   <div class="input-wrap"><input id="water" inputmode="decimal" placeholder="輸入數字"><span class="suffix">ml</span></div>
+                </div>
+                <div class="weight-quick-summary">
+                  <span>和起始比</span>
+                  <span id="todayWeightDelta">--</span>
                 </div>
               </div>
             </div>
@@ -1184,20 +1196,6 @@
       </div>
       <div class="weight-panel">
         <div class="weight-chart" id="weightChart"></div>
-        <div class="weight-quick">
-          <div class="input-card">
-            <label>今日體重</label>
-            <div class="input-wrap"><input id="todayWeightInput" data-weight-field="weight" data-weight-scope="today" inputmode="decimal" placeholder="輸入數字"><span class="suffix">kg</span></div>
-          </div>
-          <div class="input-card">
-            <label>今日體脂</label>
-            <div class="input-wrap"><input id="todayBodyFatInput" data-weight-field="bodyFat" data-weight-scope="today" inputmode="decimal" placeholder="輸入數字"><span class="suffix">%</span></div>
-          </div>
-          <div class="weight-quick-summary">
-            <span>今日變化</span>
-            <span id="todayWeightDelta">--</span>
-          </div>
-        </div>
         <div class="weight-calendar-wrap">
           <div class="history-toolbar">
             <button class="navbtn" id="prevWeightMonth">‹</button>
@@ -1280,9 +1278,8 @@
     let initialBodyState = { weight: Number(profile.initialWeight) || 0, bodyFat: Number(profile.initialBodyFat) || 0 };
     let targetBodyState = { weight: Number(profile.targetWeight) || 0, bodyFat: Number(profile.targetBodyFat) || 0 };
     const commonWarmupItems = [
-      "心率提升 3 分鐘：跑步機快走、飛輪輕踩或划船機，心率約 110-130 bpm",
-      "動態熱身 5 分鐘：開合跳、髖關節繞環、世界最佳伸展、肩胛繞環、貓牛式、弓步走轉體",
-      "主項目暖身組：空槓 10 下 → 50% 工作重量 5 下 → 70% 工作重量 3 下，再進入工作組"
+      "5 mins｜升溫：跑步機快走、飛輪或划船機，做到身體微熱、微喘即可。",
+      "5 mins｜啟動：深蹲 10 下、髖關節繞環每邊 10 圈、肩胛繞環 10 圈、今天主動作空重量 8-10 下。"
     ];
 
     const workoutTemplates = {
@@ -1291,7 +1288,6 @@
         summary: "高熱量消耗 + 中等阻力訓練保留肌肉量，適合想降低體脂、視覺上變瘦的人。",
         diet: "每日比 TDEE 少 300-500 大卡；蛋白質每公斤 1.6-2.0g；戒含糖飲料，水分 2500ml 以上。",
         training: "每週 5 個訓練日 + 2 個休息/輕活動日。第 2 週加量，第 3 週縮短休息挑戰，第 4 週減量恢復。",
-        warmup: ["跑步機快走 3 分鐘（坡度 5%）", "自體深蹲 15 下 x2", "彈力帶側走每邊 10 步 x2", "死蟲 10 下 x2"],
         days: [
           { title: "全身循環 A", tag: "減脂循環", emoji: "🔥", className: "green", items: ["深蹲 3x12", "滑輪下拉 3x12", "啞鈴肩推 3x12", "棒式 3x30秒", "跑步機快走 15 分鐘（坡度 8%）"], note: "建立動作模式，重量保守，先把節奏做穩。" },
           { title: "有氧 + 核心", tag: "心肺核心", emoji: "💛", className: "yellow", items: ["飛輪 HIIT 20 分鐘（30秒衝/30秒慢 x20）", "死蟲 3x15", "俄羅斯轉體 3x20"], note: "心肺日以完成為優先，衝刺段不要硬撐到姿勢跑掉。" },
@@ -1307,9 +1303,8 @@
         summary: "高訓練量 + 阻力訓練保肌 + 穩態與 HIIT 交替，適合有運動基礎、想加速減脂的人。",
         diet: "每日比 TDEE 少 500-700 大卡；蛋白質每公斤 2.2-2.4g；大重量日碳水較高、有氧日碳水較低。",
         training: "每週 5-6 個訓練日 + 1 個完整休息日。第 2 週加重量與 HIIT 強度，第 3 週高峰挑戰，第 4 週減量恢復。",
-        warmup: ["飛輪暖身 3 分鐘（自覺微喘）", "自體深蹲 + 跳躍 15 下", "伏地挺身 10 下", "鳥狗式 10 下 + 臀橋 15 下", "空槓深蹲、空槓硬舉各 8 下"],
         days: [
-          { title: "下肢力量 + 代謝", tag: "進階腿日", emoji: "🔥", className: "lime", items: ["槓鈴深蹲 4x8（RPE 7-8）", "腿推 4x12", "羅馬尼亞硬舉 4x10", "保加利亞分腿蹲 3x10/邊", "飛輪 HIIT 15 分鐘（30秒衝/30秒恢復）"], note: "主訓練重量要有挑戰，但每組仍保留動作品質。" },
+          { title: "下肢力量 + 代謝", tag: "進階腿日", emoji: "🔥", className: "lime", items: ["槓鈴深蹲 4x8", "腿推 4x12", "羅馬尼亞硬舉 4x10", "保加利亞分腿蹲 3x10/邊", "飛輪 HIIT 15 分鐘（30秒衝/30秒恢復）"], note: "主訓練重量要有挑戰，但每組仍保留動作品質。" },
           { title: "上肢推 + 核心", tag: "Push + Core", emoji: "💪", className: "amber", items: ["槓鈴臥推 4x8", "啞鈴肩推 4x10", "繩索三頭 3x12", "側平舉 3x15", "懸吊抬腿 3x12", "棒式 3x45秒"], note: "推的動作先穩定肩胛，核心動作不要憋氣硬撐。" },
           { title: "有氧 + 弱項補強", tag: "心肺補強", emoji: "🚣", className: "yellow", items: ["划船機 20 分鐘（每 2 分鐘衝刺 30 秒）", "臀推 4x12", "髖外展 3x15", "農夫走路 3x30m"], note: "今天是代謝與弱項補強，不要把每個動作都做到力竭。" },
           { title: "上肢拉 + 核心", tag: "Pull + Core", emoji: "🧲", className: "green", items: ["引體向上 4xAMRAP", "滑輪下拉 4x10", "坐姿划船 4x10", "面拉 3x15", "二頭彎舉 3x12", "俄羅斯轉體 3x20"], note: "背部先做出肩胛下壓與划船路徑，再追求重量。" },
@@ -1337,7 +1332,7 @@
         label: "減脂增肌", emoji: "🟠", className: "orange",
         summary: "熱量維持或微赤字 + 高強度阻力訓練，適合初學者、回歸訓練或想同時改善體態的人。",
         diet: "維持 TDEE 或 -100~-200 大卡；蛋白質每公斤 2.0-2.4g；訓練日碳水多、休息日少。",
-        training: "推/拉/腿 + 2 天混合。第 1 週 RPE 7，第 2-3 週 RPE 8，第 4 週減量恢復。",
+        training: "推/拉/腿 + 2 天混合。第 1 週先穩定動作，第 2-3 週提高重量或訓練量，第 4 週減量恢復。",
         days: [
           { title: "Push 推", tag: "推日", emoji: "💪", className: "amber", items: ["槓鈴臥推 4x6-8", "肩推 4x8", "上斜啞鈴推 3x10", "繩索三頭 3x12", "側平舉 3x15"], note: "主項目保留 1-2 下餘力，副項目做滿控制。" },
           { title: "Pull 拉", tag: "拉日", emoji: "🧲", className: "lime", items: ["硬舉 4x6", "引體向上 4x8", "坐姿划船 4x10", "面拉 3x15", "二頭彎舉 3x12"], note: "硬舉日不要每組都硬拚，脊椎中立最重要。" },
@@ -1439,9 +1434,9 @@
     function getWarmupItems(detail){
       if(!detail) return commonWarmupItems;
       if(["恢復", "休息"].some(word => detail.tag.includes(word))){
-        return ["今天不用正式訓練熱身；如果有活動，先輕鬆走路 5-10 分鐘。", "做肩頸、髖、腳踝的溫和活動度，各 30-60 秒。", "若身體疲勞明顯，以睡眠、補水和伸展恢復為優先。"];
+        return ["5 mins｜輕鬆走路或原地踏步，讓身體醒過來。", "5 mins｜肩頸、髖、腳踝活動度，每個動作慢慢做 30-60 秒。"];
       }
-      return [...commonWarmupItems, ...(detail.warmup || [])];
+      return detail.warmup?.length ? detail.warmup.slice(0, 2) : commonWarmupItems;
     }
 
     function renderWarmupList(detail){
@@ -1461,7 +1456,7 @@
       if(weekInCycle === 2) return "第 2 週：依狀況增加一點重量或組數，保持動作品質。";
       if(weekInCycle === 3) return "第 3 週：本週是高峰挑戰，保留安全餘力，不硬拚疼痛。";
       if(weekInCycle === 4) return "第 4 週：減量恢復週，重量或總量下降約 15-20%。";
-      return "第 1 週：建立動作模式，從 RPE 6-7 開始。";
+      return "第 1 週：建立動作模式，先用能穩定控制的重量開始。";
     }
 
     function createDayPlans(length){
@@ -1501,6 +1496,8 @@
         ? merged.customWorkouts.map(item => ({
           text: typeof item === "string" ? item : String(item?.text || ""),
           done: Boolean(typeof item === "string" ? false : item?.done),
+          sets: typeof item === "string" ? "" : String(item?.sets || ""),
+          reps: typeof item === "string" ? "" : String(item?.reps || ""),
           load: typeof item === "string" ? "" : String(item?.load || "")
         })).filter(item => item.text.trim())
         : [];
@@ -1532,7 +1529,7 @@
     }
 
     const calorieFields = ["breakfastCalories","lunchCalories","dinnerCalories","snackCalories"];
-    const fields = [...calorieFields,"protein","burn","bodyFat","water","mood","actualWorkout","memo"];
+    const fields = [...calorieFields,"protein","burn","water","mood","actualWorkout","memo"];
 
     let logs = loadLogs();
     let selected = getTodayOffset();
@@ -1916,6 +1913,37 @@
       return pb ? `<span class="pb-badge">PB ${pb}kg</span>` : "";
     }
 
+    function formatCustomWorkoutMeta(item){
+      const parts = [];
+      if(item.sets) parts.push(`${escapeHtml(item.sets)}組`);
+      if(item.reps) parts.push(`${escapeHtml(item.reps)}次`);
+      if(item.load) parts.push(`${escapeHtml(item.load)}kg`);
+      return parts.length ? `｜${parts.join(" / ")}` : "";
+    }
+
+    function parseWorkoutText(text){
+      const value = String(text || "").trim();
+      const match = value.match(/^(.+?)\s+(\d+)\s*[x×]\s*([^\s（(]+)(.*)$/i);
+      if(!match) return { text: value, sets: "", reps: "" };
+      const note = match[4]?.trim() || "";
+      return {
+        text: `${match[1].trim()}${note}`,
+        sets: match[2],
+        reps: match[3]
+      };
+    }
+
+    function formatWorkoutHistoryLine(item, options = {}){
+      const parsed = options.parse ? parseWorkoutText(item.text) : { text: item.text, sets: item.sets || "", reps: item.reps || "" };
+      const line = {
+        text: parsed.text,
+        sets: parsed.sets || item.sets || "",
+        reps: parsed.reps || item.reps || "",
+        load: item.load || ""
+      };
+      return `${options.donePrefix ? "✓ " : ""}${escapeHtml(line.text)}${formatCustomWorkoutMeta(line)}`;
+    }
+
     function renderWeightTracker(updateTable = true){
       const startState = getStartBodyState();
       const actualWeights = logs.map(l => Number(l.weight)).filter(Boolean);
@@ -1999,8 +2027,8 @@
     }
 
     function updateTodayWeightDelta(){
-      const todayLog = logs[getTodayOffset()];
-      const delta = getWeightDeltaText(todayLog);
+      const currentLog = logs[selected];
+      const delta = getWeightDeltaText(currentLog);
       const deltaEl = document.getElementById("todayWeightDelta");
       deltaEl.textContent = delta.text;
       deltaEl.className = `weight-delta ${delta.className}`;
@@ -2010,13 +2038,10 @@
       logs[id][field] = value;
       saveLogs();
       updateSaveStatus(field === "weight" ? "已自動儲存體重" : "已自動儲存體脂");
-      if(id === selected && field === "bodyFat"){
-        document.getElementById("bodyFat").value = value;
-      }
       renderHeaderOnly();
       renderHistory();
       renderWeightTracker(false);
-      if(scope === "today"){
+      if(scope === "record"){
         updateTodayWeightDelta();
       }else{
         renderWeightInputs();
@@ -2026,10 +2051,10 @@
     }
 
     function renderWeightInputs(){
-      const todayId = getTodayOffset();
-      const todayLog = logs[todayId];
-      document.getElementById("todayWeightInput").value = todayLog.weight || "";
-      document.getElementById("todayBodyFatInput").value = todayLog.bodyFat || "";
+      const currentLog = logs[selected];
+      document.getElementById("recordWeightInput").value = currentLog.weight || "";
+      document.getElementById("recordBodyFatInput").value = currentLog.bodyFat || "";
+      document.getElementById("recordBodyDate").textContent = formatDate(selected);
       updateTodayWeightDelta();
     }
 
@@ -2081,14 +2106,16 @@
     }
 
     function renderWeightDetail(){
+      const detailEl = document.getElementById("weightDetail");
+      if(!detailEl) return;
       if(weightSelected === null){
-        document.getElementById("weightDetail").innerHTML = "";
+        detailEl.innerHTML = "";
         return;
       }
       const log = logs[weightSelected];
       const target = getTargetWeight(log.id);
       const delta = getWeightDeltaText(log);
-      document.getElementById("weightDetail").innerHTML = `
+      detailEl.innerHTML = `
         <div class="weight-detail">
           <div class="weight-detail-head">
             <div class="weight-detail-title">
@@ -2100,11 +2127,11 @@
           <div class="weight-detail-grid">
             <div class="input-card">
               <label>早晨體重</label>
-              <div class="input-wrap"><input class="weight-input" data-weight-field="weight" data-weight-scope="detail" inputmode="decimal" value="${escapeAttr(log.weight || "")}" placeholder="輸入數字"><span class="suffix">kg</span></div>
+              <div class="input-wrap"><input class="weight-input" value="${escapeAttr(log.weight || "")}" placeholder="未填寫" readonly><span class="suffix">kg</span></div>
             </div>
             <div class="input-card">
               <label>體脂率</label>
-              <div class="input-wrap"><input class="bodyfat-input" data-weight-field="bodyFat" data-weight-scope="detail" inputmode="decimal" value="${escapeAttr(log.bodyFat || "")}" placeholder="輸入數字"><span class="suffix">%</span></div>
+              <div class="input-wrap"><input class="bodyfat-input" value="${escapeAttr(log.bodyFat || "")}" placeholder="未填寫" readonly><span class="suffix">%</span></div>
             </div>
             <div class="weight-quick-summary">
               <span>和起始比</span>
@@ -2212,7 +2239,11 @@
             <span class="item-text">${escapeHtml(item.text)}</span>
           </label>
           <div class="load-wrap">
-            <input class="load-input" data-custom-workout-load="${index}" inputmode="decimal" value="${escapeAttr(item.load || "")}" placeholder="重量">
+            <input class="load-input custom-count-input" data-custom-workout-field="sets" data-custom-workout-index="${index}" inputmode="numeric" value="${escapeAttr(item.sets || "")}" placeholder="組">
+            <span class="load-unit">組</span>
+            <input class="load-input custom-count-input" data-custom-workout-field="reps" data-custom-workout-index="${index}" inputmode="numeric" value="${escapeAttr(item.reps || "")}" placeholder="次">
+            <span class="load-unit">次</span>
+            <input class="load-input" data-custom-workout-field="load" data-custom-workout-index="${index}" inputmode="decimal" value="${escapeAttr(item.load || "")}" placeholder="重量">
             <span class="load-unit">kg</span>
             ${renderPbBadge(item.text)}
           </div>
@@ -2229,12 +2260,13 @@
         });
       });
 
-      document.querySelectorAll("[data-custom-workout-load]").forEach(input => {
+      document.querySelectorAll("[data-custom-workout-field]").forEach(input => {
         input.addEventListener("input", e => {
-          const index = Number(e.target.dataset.customWorkoutLoad);
-          logs[selected].customWorkouts[index].load = e.target.value;
+          const index = Number(e.target.dataset.customWorkoutIndex);
+          const field = e.target.dataset.customWorkoutField;
+          logs[selected].customWorkouts[index][field] = e.target.value;
           saveLogs();
-          updateSaveStatus("已自動儲存重量");
+          updateSaveStatus("已自動儲存自由運動");
           renderHistory();
         });
       });
@@ -2405,10 +2437,10 @@
         log.weight ? `${escapeHtml(log.weight)}kg` : ""
       ].filter(Boolean);
       const recommendedList = doneItems.length
-        ? `<ul class="history-done-list">${doneItems.map(item => `<li>${escapeHtml(item.text)}${item.load ? `｜${escapeHtml(item.load)}kg` : ""}</li>`).join("")}</ul>`
+        ? `<ul class="history-done-list">${doneItems.map(item => `<li>${formatWorkoutHistoryLine(item, { parse: true })}</li>`).join("")}</ul>`
         : `<p>還沒有勾選完成項目。</p>`;
       const customList = customWorkouts.length
-        ? `<ul class="history-done-list">${customWorkouts.map(item => `<li>${item.done ? "✓ " : ""}${escapeHtml(item.text)}${item.load ? `｜${escapeHtml(item.load)}kg` : ""}</li>`).join("")}</ul>`
+        ? `<ul class="history-done-list">${customWorkouts.map(item => `<li>${formatWorkoutHistoryLine(item, { donePrefix: item.done })}</li>`).join("")}</ul>`
         : `<p>這天沒有新增自訂運動。</p>`;
 
       document.getElementById("historyDetail").innerHTML = `
@@ -2507,10 +2539,14 @@
     document.getElementById("customWorkoutForm").addEventListener("submit", e => {
       e.preventDefault();
       const input = document.getElementById("customWorkoutInput");
+      const setsInput = document.getElementById("customWorkoutSets");
+      const repsInput = document.getElementById("customWorkoutReps");
       const text = input.value.trim();
       if(!text) return;
-      logs[selected].customWorkouts.push({ text, done: false, load: "" });
+      logs[selected].customWorkouts.push({ text, done: false, sets: setsInput.value.trim(), reps: repsInput.value.trim(), load: "" });
       input.value = "";
+      setsInput.value = "";
+      repsInput.value = "";
       saveLogs();
       renderCustomWorkouts();
       renderHistory();
@@ -2624,7 +2660,8 @@
 
     document.addEventListener("input", e => {
       if(!e.target.matches("[data-weight-field]")) return;
-      const id = e.target.dataset.weightScope === "today" ? getTodayOffset() : weightSelected;
+      const id = e.target.dataset.weightScope === "record" ? selected : weightSelected;
+      if(id === null || id === undefined) return;
       updateWeightLog(id, e.target.dataset.weightField, e.target.value, e.target.dataset.weightScope);
     });
 
